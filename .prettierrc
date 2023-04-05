@@ -1,6 +1,12 @@
 {
-  "tabWidth": 2,
-  "trailingComma": "all",
-  "singleQuote": false,
-  "endOfLine": "lf"
+  "prettier/prettier": [
+    "error",
+    {
+      "tabWidth": 2,
+      "trailingComma": "all",
+      "singleQuote": false,
+      "endOfLine": "lf",
+      "parser": "flow"
+    }
+  ]
 }
