@@ -59,7 +59,9 @@ export default function Header() {
     <>
       <Base>
         <List>
-          <Left>mAInd</Left>
+          <Link to="/">
+            <Left>mAInd</Left>
+          </Link>
           <Right>
             <Menu>상담하기</Menu>
             <Menu>상담 예약</Menu>
