@@ -63,8 +63,12 @@ export default function Header() {
             <Left>mAInd</Left>
           </Link>
           <Right>
-            <Menu>상담하기</Menu>
-            <Menu>상담 예약</Menu>
+            <Link to="/meeting">
+              <Menu>상담하기</Menu>
+            </Link>
+            <Link to="/initial_survey">
+              <Menu>상담예약</Menu>
+            </Link>
             <Menu>상담 기록</Menu>
             <Link to="/login">
               <Sign isPrimaryBg={true}>로그인</Sign>
