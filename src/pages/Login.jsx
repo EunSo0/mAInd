@@ -1,6 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "../components/Header";
 import styled from "styled-components";
+import { setLocalStorage } from "../utility/storage";
+import { passwordValidation } from "../utility/validation";
+import { useForm } from "react-hook-form";
+// import loginStateAtom from "../recoil/atom";
+import { useNavigate } from "react-router-dom";
+// import { useSetRecoilState } from "recoil";
+import { loginFetcher } from "../api/api";
 
 const All = styled.div`
   width: 100%;
@@ -62,15 +69,61 @@ const Link = styled.a`
 `;
 
 export default function Login() {
+  const { register, handleSubmit } = useForm();
+  // const setLoginState = useSetRecoilState(loginStateAtom);
+
+  const navigation = useNavigate();
+
+  const [isPasswordValidation, setIsPasswordValidation] = useState(false);
+
+  const inputChangeHandler = ({ e, validate, validationFunc }) => {
+    const { value } = e.target;
+    validate(validationFunc(value));
+  };
+
+  const loginSubmitHandler = async (data) => {
+    const loginInfo = await loginFetcher({
+      id: data["id"],
+      password: data["password"],
+    });
+    if (loginInfo.code === 200) {
+      const { accessToken } = loginInfo.data;
+      const token = accessToken.split(" ")[1];
+      // setLoginState(true);
+      setLocalStorage("token", token);
+      navigation("/");
+    } else {
+      alert(loginInfo.message);
+    }
+  };
   return (
     <>
       <All>
         <Header />
-        <Base>
+        <Base onSubmit={handleSubmit(loginSubmitHandler)}>
           <Title>로그인</Title>
-          <Input placeholder="이메일" type="text" id="email" />
-          <Input placeholder="비밀번호" type="password" id="password" />
-          <Button>로그인</Button>
+          <Input
+            type={"id"}
+            {...register("id")}
+            placeholder="이메일"
+            required={true}
+          />
+          <Input
+            type={"password"}
+            {...register("password")}
+            placeholder="비밀번호"
+            required={true}
+            onChange={(e) =>
+              inputChangeHandler({
+                e,
+                validate: setIsPasswordValidation,
+                validationFunc: passwordValidation,
+              })
+            }
+          />
+          <Button type="submit" disabled={!isPasswordValidation}>
+            로그인
+          </Button>
           <Link href="/signup">
             <Text>회원가입</Text>
           </Link>

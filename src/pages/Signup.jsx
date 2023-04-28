@@ -1,6 +1,15 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Header from "../components/Header";
+import { useForm } from "react-hook-form";
+import {
+  emailValidation,
+  passwordValidation,
+  phoneValidation,
+  birthValidation,
+} from "../utility/validation";
+import { signUpFetcher } from "../api/api";
+import { useNavigate } from "react-router-dom";
 
 const All = styled.div`
   width: 100%;
@@ -33,11 +42,6 @@ const GroupWrap = styled.div`
   height: 100px;
 `;
 
-const Birth = styled.div`
-  display: flex;
-  height: 100px;
-`;
-
 const Input = styled.input`
   font: inherit;
   padding: 0.5rem;
@@ -50,38 +54,11 @@ const Input = styled.input`
   display: block;
 `;
 
-const Input2 = styled.input`
-  font: inherit;
-  padding: 0.5rem;
-  border-radius: 6px;
-  border: 1px solid #dfdfdf;
-  width: 7rem;
-  height: 1.5rem;
-  max-width: 100%;
-  margin: -1px auto;
-  display: block;
-`;
-
-const Select = styled.select`
-  position: relative;
-  width: 7rem;
-  height: 40px;
-  border: 1px solid #dfdfdf;
-  margin: 0 10px 0 7px;
-`;
-
 const Label = styled.h1`
   font-weight: 800;
   display: flex;
   font-size: 15px;
   margin: 10px;
-`;
-const Condition = styled.h1`
-  font-weight: 800;
-  display: flex;
-  font-size: 12px;
-  margin: 10px;
-  color: rgb(130, 130, 130);
 `;
 
 const Text = styled.h1`
@@ -117,173 +94,190 @@ const Link = styled.a`
   text-decoration: none;
 `;
 
+const WarningSpan = styled.span`
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 18px;
+  color: #f36868;
+`;
+
 function Signup() {
-  const [email, setEmail] = useState("");
+  const { register, handleSubmit } = useForm();
+
+  const navigation = useNavigate();
+
+  const [id, setId] = useState("");
   const [password, setPassword] = useState("");
-  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [rePassword, setRePassword] = useState("");
+  const [name, setName] = useState("");
+  const [birth, setBirth] = useState("");
+  const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
 
-  const [emailMessage, setEmailMessage] = useState("");
-  const [passwordMessage, setPasswordMessage] = useState("");
-  const [passwordConfirmMessage, setPasswordConfirmMessage] = useState("");
-  const [phoneMessage, setPhoneMessage] = useState("");
+  const [isEmailValidate, setIsEmailValidate] = useState(false);
+  const [isPasswordValidate, setIsPasswordValidate] = useState(false);
+  const [isRePasswordValidate, setIsRePasswordValidate] = useState(false);
+  const [isPhoneValidate, setIsPhoneValidate] = useState(false);
+  const [isBirthValidate, setIsBirthValidate] = useState(false);
 
-  const [isEmail, setIsEmail] = useState(false);
-  const [isPassword, setIsPassword] = useState(false);
-  const [isPasswordConfirm, setIsPasswordConfirm] = useState(false);
-  const [isPhone, setIsPhone] = useState(false);
-  // const router = useRouter();
+  const signUpSubmitHandler = (data) => {
+    // 여기서 submit 처리
+    const { id, password, name, birth, email, phone } = data;
 
-  // 이메일
-  const onChangeEmail = useCallback((e) => {
-    const emailRegex =
-      /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
-    const emailCurrent = e.target.value;
-    setEmail(emailCurrent);
-
-    if (!emailRegex.test(emailCurrent)) {
-      setEmailMessage("이메일 형식으로 입력해주세요.");
-      setIsEmail(false);
-    } else {
-      setEmailMessage("");
-      setIsEmail(true);
-    }
-  }, []);
-
-  // 비밀번호
-  const onChangePassword = useCallback((e) => {
-    const passwordRegex =
-      /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
-    const passwordCurrent = e.target.value;
-    setPassword(passwordCurrent);
-
-    if (!passwordRegex.test(passwordCurrent)) {
-      setPasswordMessage(
-        "숫자+영문자+특수문자 조합으로 8자리 이상 입력해주세요."
-      );
-      setIsPassword(false);
-    } else {
-      setPasswordMessage("");
-      setIsPassword(true);
-    }
-  }, []);
-
-  // 비밀번호 확인
-  const onChangePasswordConfirm = useCallback(
-    (e) => {
-      const passwordConfirmCurrent = e.target.value;
-      setPasswordConfirm(passwordConfirmCurrent);
-
-      if (password === passwordConfirmCurrent) {
-        setPasswordConfirmMessage("비밀번호가 일치합니다.");
-        setIsPasswordConfirm(true);
-      } else {
-        setPasswordConfirmMessage("");
-        setIsPasswordConfirm(false);
-      }
-    },
-    [password]
-  );
-
-  const onChangePhone = useCallback((e) => {
-    const phoneRegex = /^01(?:0|1|[6-9])(?:\d{3}|\d{4})\d{4}$/;
-    const phoneCurrent = e.target.value;
-    setPhone(phoneCurrent);
-
-    if (!phoneRegex.test(phoneCurrent)) {
-      setPhoneMessage("숫자만 입력해주세요.");
-      setIsPhone(false);
-    } else {
-      setPhoneMessage("");
-      setIsPhone(true);
-    }
-  }, []);
+    signUpFetcher({ id, password, name, birth, email, phone })
+      .then((data) => {
+        if (data.code !== 200) {
+          alert(data.message);
+        } else {
+          alert(data.response);
+          navigation("/login");
+        }
+      })
+      .catch((error) => alert(error.message));
+  };
 
   return (
     <>
       <All>
         <Header />
-        <Base>
+        <Base onSubmit={handleSubmit(signUpSubmitHandler)}>
           <Title>회원가입</Title>
           <form>
             <Group>
               <Label>아이디</Label>
-              <Input placeholder="아이디를 입력해주세요." type="text" id="id" />
+              <Input
+                placeholder="아이디를 입력해주세요."
+                type="id"
+                {...register("id", {
+                  onChange: (e) => {
+                    const { value } = e.target;
+                    setId(value);
+                  },
+                  value: id,
+                  required: true,
+                })}
+              />
             </Group>
             <Group>
               <Label>비밀번호</Label>
               <Input
-                placeholder="비밀번호를 입력해주세요."
+                placeholder="비밀번호를 입력해주세요"
                 type="password"
-                id="password"
-                onChange={onChangePassword}
+                {...register("password", {
+                  onChange: (e) => {
+                    const { value } = e.target;
+                    setPassword(value);
+                    setIsPasswordValidate(passwordValidation(value));
+                  },
+                  value: password,
+                  required: true,
+                })}
               />
-              {password.length > 0 && <Condition>{passwordMessage}</Condition>}
+              {isPasswordValidate || password.length === 0 ? null : (
+                <WarningSpan>
+                  비밀번호는 특수문자,알파벳,숫자를 포함한 8~20자의 문자입니다.
+                </WarningSpan>
+              )}
             </Group>
             <Group>
               <Label>비밀번호 확인</Label>
               <Input
-                placeholder="비밀번호를 한번 더 입력해주세요."
+                placeholder="다시한번 비밀번호를 입력해주세요"
                 type="password"
-                id="confirmPassword"
-                onChange={onChangePasswordConfirm}
+                {...register("rePassword", {
+                  onChange: (e) => {
+                    const { value } = e.target;
+                    setRePassword(value);
+                    setIsRePasswordValidate(password === e.target.value);
+                  },
+                  value: rePassword,
+                  required: true,
+                })}
               />
-              {passwordConfirm.length > 0 && (
-                <Condition>{passwordConfirmMessage}</Condition>
+              {isRePasswordValidate || rePassword.length === 0 ? null : (
+                <WarningSpan>비밀번호와 같지 않습니다.</WarningSpan>
               )}
             </Group>
             <Group>
               <Label>이름</Label>
-              <Input placeholder="이름을 입력해주세요." type="text" id="name" />
+              <Input
+                placeholder="이름을 입력해주세요."
+                type="name"
+                {...register("name", {
+                  onChange: (e) => {
+                    const { value } = e.target;
+                    setName(value);
+                  },
+                  required: true,
+                  value: name,
+                })}
+              />
             </Group>
             <GroupWrap>
               <Group>
                 <Label>생년월일</Label>
-                <Birth>
-                  <Input2 placeholder="년(4자)" type="number" />
-                  <Select>
-                    <option>월</option>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                    <option>6</option>
-                    <option>7</option>
-                    <option>8</option>
-                    <option>9</option>
-                    <option>10</option>
-                    <option>11</option>
-                    <option>12</option>
-                  </Select>
-                  <Input2 placeholder="일" type="text" />
-                </Birth>
+                <Input
+                  placeholder="생년월일(8자)"
+                  type="birth"
+                  {...register("birth", {
+                    onChange: (e) => {
+                      const { value } = e.target;
+                      setBirth(value);
+                      setIsBirthValidate(birthValidation(value));
+                    },
+                    value: birth,
+                    required: true,
+                  })}
+                />
+                {isBirthValidate || birth.length === 0 ? null : (
+                  <WarningSpan>
+                    생년월일은 8자로 입력하세요. ex)20230101
+                  </WarningSpan>
+                )}
               </Group>
             </GroupWrap>
             <Group>
               <Label>이메일</Label>
               <Input
                 placeholder="이메일을 입력해주세요"
-                type="text"
-                id="email"
-                onChange={onChangeEmail}
+                type="email"
+                {...register("email", {
+                  onChange: (e) => {
+                    const { value } = e.target;
+                    setEmail(value);
+                    setIsEmailValidate(emailValidation(value));
+                  },
+                  value: email,
+                  required: true,
+                })}
               />
-              {email.length > 0 && <Condition>{emailMessage}</Condition>}
+              {isEmailValidate || email.length === 0 ? null : (
+                <WarningSpan>올바른 이메일 형식을 입력하세요.</WarningSpan>
+              )}
             </Group>
             <Group>
               <Label>휴대전화</Label>
               <Input
-                placeholder="전화번호를 입력해주세요."
-                type="text"
-                id="number"
-                onChange={onChangePhone}
+                placeholder="전화번호을 입력해주세요"
+                type="phone"
+                {...register("phone", {
+                  onChange: (e) => {
+                    const { value } = e.target;
+                    setPhone(value);
+                    setIsPhoneValidate(phoneValidation(value));
+                  },
+                  value: phone,
+                  required: true,
+                })}
               />
-              {phone.length > 0 && <Condition>{phoneMessage}</Condition>}
+              {isPhoneValidate || phone.length === 0 ? null : (
+                <WarningSpan>올바른 핸드폰번호를 입력하세요.</WarningSpan>
+              )}
             </Group>
             <Button
-              disabled={
-                !(isEmail && isPassword && isPasswordConfirm && isPhone)
-              }
+              type="submit"
+              disabled={!isPasswordValidate || !isRePasswordValidate}
             >
               회원가입하기
             </Button>
