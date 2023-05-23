@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import { OpenVidu } from "openvidu-browser";
 import axios from "axios";
 import styled from "styled-components";
@@ -132,6 +132,25 @@ const ChatIconBox = styled.div`
 
 class OnlineMeeting extends Component {
   render() {
+    useEffect(() => {
+      fetch("http://localhost:5000/predict", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(videoData),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // 예측 결과 처리
+          console.log(data);
+        })
+        .catch((error) => {
+          // 오류 처리
+          console.error(error);
+        });
+    });
+
     return (
       <Container>
         <Header>
@@ -247,7 +266,6 @@ class OnlineMeeting extends Component {
 
     this.joinSession = this.joinSession.bind(this);
     this.leaveSession = this.leaveSession.bind(this);
-    this.handleMainVideoStream = this.handleMainVideoStream.bind(this);
     this.onbeforeunload = this.onbeforeunload.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
   }

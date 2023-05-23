@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Header from "../components/Header";
 import { useForm } from "react-hook-form";
@@ -8,8 +8,14 @@ import {
   phoneValidation,
   birthValidation,
 } from "../utility/validation";
-import { signUpFetcher } from "../api/api";
+import {
+  sendEmailConfirmNumber,
+  signUpFetcher,
+  confirmEmailNumber,
+} from "../api/api";
 import { useNavigate } from "react-router-dom";
+
+const CONFIRM_TIME = 300;
 
 const All = styled.div`
   width: 100%;
@@ -107,25 +113,63 @@ function Signup() {
 
   const navigation = useNavigate();
 
-  const [id, setId] = useState("");
+  const [email, setEmail] = useState("");
+  const [emailConfirm, setEmailConfirm] = useState("");
   const [password, setPassword] = useState("");
   const [rePassword, setRePassword] = useState("");
   const [name, setName] = useState("");
   const [birth, setBirth] = useState("");
-  const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
 
+  const [confirmTime, setConfirmTime] = useState(CONFIRM_TIME);
+
   const [isEmailValidate, setIsEmailValidate] = useState(false);
+  const [isEmailConfirmInput, setIsEmailConfirmInput] = useState(false);
   const [isPasswordValidate, setIsPasswordValidate] = useState(false);
   const [isRePasswordValidate, setIsRePasswordValidate] = useState(false);
   const [isPhoneValidate, setIsPhoneValidate] = useState(false);
   const [isBirthValidate, setIsBirthValidate] = useState(false);
+  const [isConfirmedEmail, setIsConfirmedEmail] = useState(false);
+
+  const sendEmailProperty = {
+    buttonTitle: "전송하기",
+    buttonHandler: (e) => {
+      e.preventDefault();
+      sendEmailConfirmNumber(email)
+        .then((data) => {
+          if (data.code === 200) setIsEmailConfirmInput(true);
+          else alert(data.message);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+  };
+
+  const confirmEmailProperty = {
+    buttonTitle: "확인하기",
+    buttonHandler: (e) => {
+      e.preventDefault();
+      confirmEmailNumber(email, emailConfirm)
+        .then((data) => {
+          if (data.code === 200) {
+            alert(data.response);
+            setConfirmTime(CONFIRM_TIME);
+            setIsEmailConfirmInput(false);
+            setIsConfirmedEmail(true);
+          } else {
+            alert(data.message);
+          }
+        })
+        .finally(() => setEmailConfirm(""));
+    },
+  };
 
   const signUpSubmitHandler = (data) => {
     // 여기서 submit 처리
-    const { id, password, name, birth, email, phone } = data;
+    const { email, password, name, birth, phone } = data;
 
-    signUpFetcher({ id, password, name, birth, email, phone })
+    signUpFetcher({ email, password, name, birth, phone })
       .then((data) => {
         if (data.code !== 200) {
           alert(data.message);
@@ -137,6 +181,15 @@ function Signup() {
       .catch((error) => alert(error.message));
   };
 
+  useEffect(() => {
+    if (isEmailConfirmInput && confirmTime > 0 && isEmailValidate) {
+      const timer = setInterval(() => {
+        setConfirmTime((cur) => --cur);
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [confirmTime, isEmailConfirmInput, isEmailValidate]);
+
   return (
     <>
       <All>
@@ -147,17 +200,22 @@ function Signup() {
             <Group>
               <Label>아이디</Label>
               <Input
-                placeholder="아이디를 입력해주세요."
-                type="id"
-                {...register("id", {
+                placeholder="이메일을 입력해주세요"
+                type="email"
+                {...register("email", {
                   onChange: (e) => {
                     const { value } = e.target;
-                    setId(value);
+                    setEmail(value);
+                    setIsEmailValidate(emailValidation(value));
+                    setIsConfirmedEmail(false);
                   },
-                  value: id,
+                  value: email,
                   required: true,
                 })}
               />
+              {isEmailValidate || email.length === 0 ? null : (
+                <WarningSpan>올바른 이메일 형식을 입력하세요</WarningSpan>
+              )}
             </Group>
             <Group>
               <Label>비밀번호</Label>
@@ -237,25 +295,6 @@ function Signup() {
                 )}
               </Group>
             </GroupWrap>
-            <Group>
-              <Label>이메일</Label>
-              <Input
-                placeholder="이메일을 입력해주세요"
-                type="email"
-                {...register("email", {
-                  onChange: (e) => {
-                    const { value } = e.target;
-                    setEmail(value);
-                    setIsEmailValidate(emailValidation(value));
-                  },
-                  value: email,
-                  required: true,
-                })}
-              />
-              {isEmailValidate || email.length === 0 ? null : (
-                <WarningSpan>올바른 이메일 형식을 입력하세요.</WarningSpan>
-              )}
-            </Group>
             <Group>
               <Label>휴대전화</Label>
               <Input

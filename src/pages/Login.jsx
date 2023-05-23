@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Header from "../components/Header";
 import styled from "styled-components";
 import { setLocalStorage } from "../utility/storage";
-import { passwordValidation } from "../utility/validation";
+import { emailValidation, passwordValidation } from "../utility/validation";
 import { useForm } from "react-hook-form";
 // import loginStateAtom from "../recoil/atom";
 import { useNavigate } from "react-router-dom";
@@ -74,6 +74,7 @@ export default function Login() {
 
   const navigation = useNavigate();
 
+  const [isEmailValidation, setIsEmailValidation] = useState(false);
   const [isPasswordValidation, setIsPasswordValidation] = useState(false);
 
   const inputChangeHandler = ({ e, validate, validationFunc }) => {
@@ -103,10 +104,17 @@ export default function Login() {
         <Base onSubmit={handleSubmit(loginSubmitHandler)}>
           <Title>로그인</Title>
           <Input
-            type={"id"}
-            {...register("id")}
+            type={"email"}
+            {...register("email")}
             placeholder="이메일"
             required={true}
+            onChange={(e) =>
+              inputChangeHandler({
+                e,
+                validate: setIsEmailValidation,
+                validationFunc: emailValidation,
+              })
+            }
           />
           <Input
             type={"password"}
@@ -121,7 +129,10 @@ export default function Login() {
               })
             }
           />
-          <Button type="submit" disabled={!isPasswordValidation}>
+          <Button
+            type="submit"
+            disabled={!isEmailValidation || !isPasswordValidation}
+          >
             로그인
           </Button>
           <Link href="/signup">
