@@ -15,8 +15,8 @@ import CallEndIcon from "@mui/icons-material/CallEnd";
 import ChatIcon from "@mui/icons-material/Chat";
 
 // 로컬 미디어 서버 주소
-const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === "production" ? "" : "https://demos.openvidu.io/";
+const OPENVIDU_SERVER_URL = "https://maind.site:4443/";
+const OPENVIDU_SERVER_SECRET = "maind0000";
 
 const Container = styled.div`
   height: 100vh;
@@ -132,25 +132,6 @@ const ChatIconBox = styled.div`
 
 class OnlineMeeting extends Component {
   render() {
-    useEffect(() => {
-      fetch("http://localhost:5000/predict", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(videoData),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          // 예측 결과 처리
-          console.log(data);
-        })
-        .catch((error) => {
-          // 오류 처리
-          console.error(error);
-        });
-    });
-
     return (
       <Container>
         <Header>
@@ -449,26 +430,66 @@ class OnlineMeeting extends Component {
     return await this.createToken(sessionId);
   }
 
-  async createSession(sessionId) {
-    const response = await axios.post(
-      APPLICATION_SERVER_URL + "api/sessions",
-      { customSessionId: sessionId },
-      {
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-    return response.data; // The sessionId
+  createSession(sessionId) {
+    return new Promise((resolve, reject) => {
+      let data = JSON.stringify({ customSessionId: sessionId });
+
+      axios
+        .post(OPENVIDU_SERVER_URL + "/openvidu/api/sessions", data, {
+          headers: {
+            Authorization: `Basic ${btoa(
+              `OPENVIDUAPP:${OPENVIDU_SERVER_SECRET}`
+            )}`,
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          resolve(res.data.id);
+        })
+        .catch((res) => {
+          let error = Object.assign({}, res);
+
+          if (error?.response?.status === 409) {
+            resolve(sessionId);
+          } else if (
+            window.confirm(
+              'No connection to OpenVidu Server. This may be a certificate error at "' +
+                OPENVIDU_SERVER_URL +
+                '"\n\nClick OK to navigate and accept it. If no certifica' +
+                "te warning is shown, then check that your OpenVidu Server is up and running at" +
+                ' "' +
+                OPENVIDU_SERVER_URL +
+                '"'
+            )
+          ) {
+            window.location.assign(OPENVIDU_SERVER_URL + "/accept-certificate");
+          }
+        });
+    });
   }
 
-  async createToken(sessionId) {
-    const response = await axios.post(
-      APPLICATION_SERVER_URL + "api/sessions/" + sessionId + "/connections",
-      {},
-      {
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-    return response.data; // The token
+  createToken(sessionId) {
+    return new Promise((resolve, reject) => {
+      let data = {};
+
+      axios
+        .post(
+          `${OPENVIDU_SERVER_URL}/openvidu/api/sessions/${sessionId}/connection`,
+          data,
+          {
+            headers: {
+              Authorization: `Basic ${btoa(
+                `OPENVIDUAPP:${OPENVIDU_SERVER_SECRET}`
+              )}`,
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          resolve(res.data.token);
+        })
+        .catch((error) => reject(error));
+    });
   }
 }
 
