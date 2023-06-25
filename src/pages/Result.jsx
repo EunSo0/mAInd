@@ -3,6 +3,7 @@ import Header from "../components/Header";
 import styled from "styled-components";
 import { Doughnut } from "react-chartjs-2";
 import "chart.js/auto";
+import ChartDataLabels from "chartjs-plugin-datalabels";
 
 const Container = styled.div`
   width: 70%;
@@ -137,14 +138,33 @@ function Result() {
   const separatedCounselingData = separateDialogueBySpeaker(counselingData);
 
   // 차트 색상 랜덤으로 불러오기
-  const getRandomColor = () => {
-    const letters = "0123456789ABCDEF";
-    let color = "#";
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
+  function getRandomColor(colors, selectedColors) {
+    const availableColors = colors.filter(
+      (color) => !selectedColors.includes(color)
+    );
+
+    if (availableColors.length === 0) {
+      return null;
     }
-    return color;
-  };
+
+    const randomIndex = Math.floor(Math.random() * availableColors.length);
+    const selectedColor = availableColors[randomIndex];
+    selectedColors.push(selectedColor);
+
+    return selectedColor;
+  }
+
+  const facialColors = [
+    "#FF6384", // 핑크
+    "#36A2EB", // 하늘색
+    "#FFCE56", // 노랑
+    "#FF9F40", // 오렌지
+    "#8E8CD8", // 연보라
+    "#4BC0C0", // 밝은 청록색
+    "#F08080", // 라이트코랄
+    "#4CAF50", // 라임 그린
+  ];
+  const selectColors = [];
 
   return (
     <>
@@ -194,11 +214,11 @@ function Result() {
                         labels: Object.keys(
                           index === 0 ? facialEmotion1 : facialEmotion2 || {}
                         ).map((key) => {
-                          return index === 0 && facialEmotion1[key] === 0.0
-                            ? ""
-                            : index !== 0 && facialEmotion2[key] === 0.0
-                            ? ""
-                            : key;
+                          return index === 0 && facialEmotion1[key] !== 0.0
+                            ? key
+                            : index !== 0 && facialEmotion2[key] !== 0.0
+                            ? key
+                            : "";
                         }),
                         datasets: [
                           {
@@ -213,7 +233,7 @@ function Result() {
                                 : facialEmotion2 || {}
                             ).map((value) =>
                               value !== 0.0
-                                ? getRandomColor()
+                                ? getRandomColor(facialColors, selectColors)
                                 : "rgba(0, 0, 0, 0)"
                             ),
                             hoverBackgroundColor: Object.values(
@@ -222,13 +242,39 @@ function Result() {
                                 : facialEmotion2 || {}
                             ).map((value) =>
                               value !== 0.0
-                                ? getRandomColor()
+                                ? getRandomColor(facialColors, selectColors)
                                 : "rgba(0, 0, 0, 0)"
                             ),
                           },
                         ],
                       }}
-                      options={{ responsive: true }}
+                      options={{
+                        responsive: true,
+                        plugins: {
+                          legend: {
+                            display: false, // 범례 비활성화
+                          },
+                          datalabels: {
+                            display: function (context) {
+                              // 값이 0.0인 경우 데이터 레이블 비활성화
+                              const value =
+                                context.dataset.data[context.dataIndex];
+                              return value !== 0.0;
+                            },
+                            color: "#000000", // 글씨 색상 설정
+                            font: {
+                              size: 13, // 글씨 크기 설정
+                            },
+                            formatter: function (value, context) {
+                              // 차트 위에 표시할 글씨 포맷팅
+                              const label =
+                                context.chart.data.labels[context.dataIndex];
+                              return `${label}: ${value.toFixed(1)}`;
+                            },
+                          },
+                        },
+                      }}
+                      plugins={[ChartDataLabels]} // ChartDataLabels 플러그인 추가
                     />
                   </div>
                 )}
