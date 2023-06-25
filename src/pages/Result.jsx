@@ -35,17 +35,112 @@ const Table = styled.table`
 `;
 
 const CounselingEntry = styled.div`
-  margin: 40px 10px 100px;
+  margin: 40px 0;
 `;
 
-const Question = styled.h3`
+const Question = styled.div`
   margin-top: 0;
+  margin-bottom: 15px;
   font-weight: bold;
   color: #333;
+  font-size: 24px;
+`;
+
+const EmotionLabel = styled.div`
+  text-align: center;
+  font-weight: bold;
+  color: #333;
+  font-size: 24px;
 `;
 
 const Answer = styled.p`
   margin-bottom: 30px;
+  font-size: 18px;
+`;
+
+const EmotionWrapper = styled.div`
+  display: flex;
+`;
+
+const Emotion = styled.h3`
+  margin: 0 50px 0 0;
+`;
+
+const TextEmotionCircle = styled.div`
+  border-radius: 50%;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+
+  ${({ value }) => {
+    if (value === "행복") {
+      return `
+        background-color: #F08080;
+      `;
+    } else if (value === "슬픔") {
+      return `
+        background-color: #87ceeb;
+      `;
+    } else if (value === "불안") {
+      return `
+        background-color: #FFA500;
+      `;
+    } else if (value === "분노") {
+      return `
+        background-color: #DC143C;
+      `;
+    } else {
+      return `
+        background-color: #A9A9A9;
+      `;
+    }
+  }}
+`;
+
+const TextEmotion = styled.h1`
+  font-weight: bold;
+  text-align: center;
+  font-size: 40px;
+  padding-top: 70px;
+`;
+
+const Total = styled.h1`
+  font-weight: bold;
+  font-size: 30px;
+  text-align: center;
+`;
+
+const FacialExpressionChart = styled(Doughnut)`
+  width: 200px;
+  margin-top: 25px;
+`;
+
+const TotalChartWrapper = styled.div`
+  width: 400px;
+  height: 400px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 30px 0 80px;
+`;
+
+const TotalChart = styled(Doughnut)`
+  width: 200px;
+`;
+const InputArea = styled.div`
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  margin: 50px;
+`;
+
+const Input = styled.textarea`
+  width: 80%;
+  height: 400px;
+  margin: 0 auto;
+  font-size: 20px;
+  border: 1px solid;
+  border-radius: 3px;
+  text-align: left;
 `;
 
 function Result() {
@@ -53,6 +148,7 @@ function Result() {
   const [facialEmotion1, setFacialEmotion1] = useState([]);
   const [facialEmotion2, setFacialEmotion2] = useState([]);
   const [textEmotion, setTextEmotion] = useState([]);
+  const [totalTextEmotion, setTotalTextEmotion] = useState([]);
 
   useEffect(() => {
     fetch("/convey")
@@ -63,7 +159,7 @@ function Result() {
         return res.json();
       })
       .then((data) => {
-        console.log(Object.keys(data.emotion_values));
+        console.log(data.emotion_values);
 
         const keys = Object.keys(data.emotion_values);
         const firstKey = keys[0];
@@ -82,19 +178,19 @@ function Result() {
   }, []);
 
   useEffect(() => {
-    fetch("http://3.37.179.243:5000/analyze-emotions")
-      .then(function (response) {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
+    fetch("/get_json")
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to fetch data");
         }
-        return response.json();
+        return res.json();
       })
-      .then(function (data) {
-        setTextEmotion(data);
-        console.log(data);
-        console.log(textEmotion);
+      .then((data) => {
+        setTextEmotion(data.predictions);
+        setTotalTextEmotion(data.percentages);
+        console.log(data.percentages);
       })
-      .catch(function (error) {
+      .catch((error) => {
         console.error(error);
       });
   }, []);
@@ -109,18 +205,6 @@ function Result() {
     counselorName: "천윤서",
     clientName: "장지원",
     treatmentGoal: "우울증",
-    counselingData: [
-      "슬픔",
-      "행복",
-      "슬픔",
-      "행복",
-      "슬픔",
-      "행복",
-      "슬픔",
-      "행복",
-      "슬픔",
-      "행복",
-    ],
   };
 
   // 질문과 답변을 구분하는 함수
@@ -205,84 +289,157 @@ function Result() {
                 <Answer>{question}</Answer>
                 <Question>답변 {index + 1}</Question>
                 <Answer>{answer}</Answer>
-                <Question>표정인식 {index + 1}</Question>
-                {(index === 0 ||
-                  index === separatedCounselingData.length - 1) && (
-                  <div style={{ width: "200px", height: "auto" }}>
-                    <Doughnut
-                      data={{
-                        labels: Object.keys(
-                          index === 0 ? facialEmotion1 : facialEmotion2 || {}
-                        ).map((key) => {
-                          return index === 0 && facialEmotion1[key] !== 0.0
-                            ? key
-                            : index !== 0 && facialEmotion2[key] !== 0.0
-                            ? key
-                            : "";
-                        }),
-                        datasets: [
-                          {
-                            data: Object.values(
+                <EmotionWrapper>
+                  <Emotion>
+                    <EmotionLabel>텍스트 감정분석 {index + 1}</EmotionLabel>
+                    <TextEmotionCircle value={textEmotion[index]?.emotion}>
+                      <TextEmotion>{textEmotion[index]?.emotion}</TextEmotion>
+                    </TextEmotionCircle>
+                  </Emotion>
+                  <Emotion>
+                    {(index === 0 ||
+                      index === separatedCounselingData.length - 1) && (
+                      <div style={{ width: "200px", height: "auto" }}>
+                        <EmotionLabel>표정 감정분석 {index + 1}</EmotionLabel>
+                        <FacialExpressionChart
+                          key="facialchart"
+                          data={{
+                            labels: Object.keys(
                               index === 0
                                 ? facialEmotion1
                                 : facialEmotion2 || {}
-                            ),
-                            backgroundColor: Object.values(
-                              index === 0
-                                ? facialEmotion1
-                                : facialEmotion2 || {}
-                            ).map((value) =>
-                              value !== 0.0
-                                ? getRandomColor(facialColors, selectColors)
-                                : "rgba(0, 0, 0, 0)"
-                            ),
-                            hoverBackgroundColor: Object.values(
-                              index === 0
-                                ? facialEmotion1
-                                : facialEmotion2 || {}
-                            ).map((value) =>
-                              value !== 0.0
-                                ? getRandomColor(facialColors, selectColors)
-                                : "rgba(0, 0, 0, 0)"
-                            ),
-                          },
-                        ],
-                      }}
-                      options={{
-                        responsive: true,
-                        plugins: {
-                          legend: {
-                            display: false, // 범례 비활성화
-                          },
-                          datalabels: {
-                            display: function (context) {
-                              // 값이 0.0인 경우 데이터 레이블 비활성화
-                              const value =
-                                context.dataset.data[context.dataIndex];
-                              return value !== 0.0;
+                            ).map((key) => {
+                              return index === 0 && facialEmotion1[key] !== 0.0
+                                ? key
+                                : index !== 0 && facialEmotion2[key] !== 0.0
+                                ? key
+                                : "";
+                            }),
+                            datasets: [
+                              {
+                                data: Object.values(
+                                  index === 0
+                                    ? facialEmotion1
+                                    : facialEmotion2 || {}
+                                ),
+                                backgroundColor: Object.values(
+                                  index === 0
+                                    ? facialEmotion1
+                                    : facialEmotion2 || {}
+                                ).map((value) =>
+                                  value !== 0.0
+                                    ? getRandomColor(facialColors, selectColors)
+                                    : "rgba(0, 0, 0, 0)"
+                                ),
+                                hoverBackgroundColor: Object.values(
+                                  index === 0
+                                    ? facialEmotion1
+                                    : facialEmotion2 || {}
+                                ).map((value) =>
+                                  value !== 0.0
+                                    ? getRandomColor(facialColors, selectColors)
+                                    : "rgba(0, 0, 0, 0)"
+                                ),
+                              },
+                            ],
+                          }}
+                          options={{
+                            responsive: true,
+                            plugins: {
+                              legend: {
+                                display: false, // 범례 비활성화
+                              },
+                              datalabels: {
+                                display: function (context) {
+                                  // 값이 0.0인 경우 데이터 레이블 비활성화
+                                  const value =
+                                    context.dataset.data[context.dataIndex];
+                                  return value !== 0.0;
+                                },
+                                color: "#000000", // 글씨 색상 설정
+                                font: {
+                                  size: 14, // 글씨 크기 설정
+                                },
+                                formatter: function (value, context) {
+                                  // 차트 위에 표시할 글씨 포맷팅
+                                  const label =
+                                    context.chart.data.labels[
+                                      context.dataIndex
+                                    ];
+                                  return `${label}: ${value.toFixed(1)}%`;
+                                },
+                              },
                             },
-                            color: "#000000", // 글씨 색상 설정
-                            font: {
-                              size: 13, // 글씨 크기 설정
-                            },
-                            formatter: function (value, context) {
-                              // 차트 위에 표시할 글씨 포맷팅
-                              const label =
-                                context.chart.data.labels[context.dataIndex];
-                              return `${label}: ${value.toFixed(1)}`;
-                            },
-                          },
-                        },
-                      }}
-                      plugins={[ChartDataLabels]} // ChartDataLabels 플러그인 추가
-                    />
-                  </div>
-                )}
+                          }}
+                          plugins={[ChartDataLabels]} // ChartDataLabels 플러그인 추가
+                        />
+                      </div>
+                    )}
+                  </Emotion>
+                </EmotionWrapper>
+                <hr />
               </CounselingEntry>
             );
           })}
         </div>
       </Container>
+      <Total>최종 텍스트 감정분석 결과</Total>
+      <TotalChartWrapper>
+        <TotalChart
+          key="totalchart"
+          data={{
+            labels: totalTextEmotion.map((item) => item.emotion),
+            datasets: [
+              {
+                data: totalTextEmotion.map((item) => item.percentage),
+                backgroundColor: [
+                  "#FF6384",
+                  "#36A2EB",
+                  "#FFCE56",
+                  "#4BC0C0",
+                  "#9966FF",
+                ],
+                hoverBackgroundColor: [
+                  "#FF6384",
+                  "#36A2EB",
+                  "#FFCE56",
+                  "#4BC0C0",
+                  "#9966FF",
+                ],
+              },
+            ],
+          }}
+          options={{
+            responsive: true,
+            plugins: {
+              legend: {
+                display: false, // 범례 비활성화
+              },
+              datalabels: {
+                display: function (context) {
+                  // 값이 0.0인 경우 데이터 레이블 비활성화
+                  const value = context.dataset.data[context.dataIndex];
+                  return value !== 0.0;
+                },
+                color: "#000000", // 글씨 색상 설정
+                font: {
+                  size: 18, // 글씨 크기 설정
+                },
+                formatter: function (value, context) {
+                  // 차트 위에 표시할 글씨 포맷팅
+                  const label = context.chart.data.labels[context.dataIndex];
+                  return `${label}: ${value}%`;
+                },
+              },
+            },
+          }}
+          plugins={[ChartDataLabels]} // ChartDataLabels 플러그인 추가
+        />
+      </TotalChartWrapper>
+      <Total>상담자 평가</Total>
+      <InputArea>
+        <Input />
+      </InputArea>
     </>
   );
 }
