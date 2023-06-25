@@ -6,7 +6,7 @@ const All = styled.div`
   width: 80%;
   height: 100%;
   margin: 0 auto;
-  padding: 100px;
+  padding: 100px 0;
 `;
 
 const Title = styled.h1`
@@ -22,12 +22,6 @@ const Wrapper = styled.div`
   margin: 50px;
 `;
 
-const ShortInfo = styled.div`
-  display: flex;
-  width: 80%;
-  margin: 0 auto;
-`;
-
 const ShortLabel = styled.label`
   width: 200px;
   font-size: 20px;
@@ -35,6 +29,7 @@ const ShortLabel = styled.label`
   text-align: right;
   padding: 7px 0px;
 `;
+
 const ShortInput = styled.input`
   width: 200px;
   height: 20px;
@@ -43,17 +38,19 @@ const ShortInput = styled.input`
   font-size: 20px;
   padding: 10px;
   border: 1px solid;
-  border-radius: 8px;
 `;
+
 const Info = styled.div`
   display: flex;
   width: 80%;
   margin: 0 auto;
 `;
+
 const Info2 = styled.div`
   width: 80%;
   margin: 0 auto;
 `;
+
 const Label = styled.label`
   width: 200px;
   height: 40px;
@@ -62,10 +59,12 @@ const Label = styled.label`
   text-align: right;
   padding: 9px 0px;
 `;
+
 const LongLabel = styled.label`
   font-size: 20px;
   padding: 0 20px;
 `;
+
 const Input = styled.textarea`
   width: 100%;
   height: 100px;
@@ -75,6 +74,7 @@ const Input = styled.textarea`
   border: 1px solid;
   border-radius: 3px;
 `;
+
 const Submit = styled.button`
   justify-content: center;
   background-color: #85b3cd;
@@ -86,29 +86,57 @@ const Submit = styled.button`
   margin: 50px 0;
 `;
 
-export default function Inital_survey() {
+export default function InitialSurvey() {
   return (
     <>
       <Header />
       <All>
         <Title>초기 설문지</Title>
         <Wrapper>
-          <ShortInfo>
-            <ShortLabel>이름</ShortLabel>
-            <ShortInput id="name" />
-            <ShortLabel>성별</ShortLabel>
-            <ShortInput id="gender" />
-            <ShortLabel>E-mail</ShortLabel>
-            <ShortInput id="mail" />
-          </ShortInfo>
-          <ShortInfo>
-            <ShortLabel>생년월일</ShortLabel>
-            <ShortInput id="birth" />
-            <ShortLabel>휴대폰</ShortLabel>
-            <ShortInput id="phone" />
-            <ShortLabel>학력</ShortLabel>
-            <ShortInput id="edu" />
-          </ShortInfo>
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                  <ShortLabel>이름</ShortLabel>
+                </td>
+                <td>
+                  <ShortInput id="name" />
+                </td>
+                <td>
+                  <ShortLabel>성별</ShortLabel>
+                </td>
+                <td>
+                  <ShortInput id="gender" />
+                </td>
+                <td>
+                  <ShortLabel>E-mail</ShortLabel>
+                </td>
+                <td>
+                  <ShortInput id="mail" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <ShortLabel>생년월일</ShortLabel>
+                </td>
+                <td>
+                  <ShortInput id="birth" />
+                </td>
+                <td>
+                  <ShortLabel>휴대폰</ShortLabel>
+                </td>
+                <td>
+                  <ShortInput id="phone" />
+                </td>
+                <td>
+                  <ShortLabel>학력</ShortLabel>
+                </td>
+                <td>
+                  <ShortInput id="edu" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </Wrapper>
         <Wrapper>
           <Info>

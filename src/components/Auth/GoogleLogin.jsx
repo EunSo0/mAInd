@@ -6,28 +6,6 @@ import { LoginWayButton } from "./KaKaoLogin";
 import styled from "styled-components";
 import { ReactComponent as GoogleLogo } from "@images/google_signin_buttons/web/vector/btn_google_light_normal_ios.svg";
 
-function GoogleLoginButton() {
-    return (
-    <GoogleLogin
-      style={{ padding: "0px" }}
-      clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-      onSuccess={onSuccessHandler}
-      onFailure={onFailureHandler}
-      cookiePolicy="single_host_origin"
-      render={(render) => (
-        <GoogleLoginContainer onClick={render.onClick}>
-          <GoogleLoginWrapper>
-            <GoogleLogo />
-            <GoogleLoginSpan>구글로 로그인하기</GoogleLoginSpan>
-          </GoogleLoginWrapper>
-        </GoogleLoginContainer>
-      }
-    />
-  );
-}
-
-export default GoogleLoginButton;
-
 const GoogleLoginContainer = styled(LoginWayButton)`
   border: 1.5px solid var(--grey);
   background-color: #ffffff;
@@ -49,3 +27,25 @@ const GoogleLoginSpan = styled.span`
   line-height: 2.4rem;
   width: 296px;
 `;
+
+function GoogleLoginButton() {
+  return (
+    <GoogleLogin
+      style={{ padding: "0px" }}
+      clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+      onSuccess={onSuccessHandler}
+      onFailure={onFailureHandler}
+      cookiePolicy="single_host_origin"
+      render={(render) => (
+        <GoogleLoginContainer onClick={render.onClick}>
+          <GoogleLoginWrapper>
+            <GoogleLogo />
+            <GoogleLoginSpan>구글로 로그인하기</GoogleLoginSpan>
+          </GoogleLoginWrapper>
+        </GoogleLoginContainer>
+      )}
+    />
+  );
+}
+
+export default GoogleLoginButton;

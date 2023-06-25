@@ -1,6 +1,5 @@
 /* eslint-disable no-undef */
-/* eslint-disable no-unused-vars */
-import React, { Component, useEffect } from "react";
+import React, { Component } from "react";
 import { OpenVidu } from "openvidu-browser";
 import axios from "axios";
 import styled from "styled-components";
@@ -15,8 +14,8 @@ import CallEndIcon from "@mui/icons-material/CallEnd";
 import ChatIcon from "@mui/icons-material/Chat";
 
 // 로컬 미디어 서버 주소
-const OPENVIDU_SERVER_URL = "https://maind.site:4443/";
-const OPENVIDU_SERVER_SECRET = "maind0000";
+const APPLICATION_SERVER_URL =
+  process.env.NODE_ENV === "production" ? "" : "https://demos.openvidu.io/";
 
 const Container = styled.div`
   height: 100vh;
@@ -45,7 +44,7 @@ const Middle = styled.div`
 `;
 
 const Left = styled.div`
-  flex: 1;
+  flex: 3;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -110,6 +109,7 @@ const Icon = styled.div`
   &:hover {
     background-color: #3c4043;
   }
+
   ${(props) =>
     props.primary &&
     `
@@ -135,7 +135,7 @@ class OnlineMeeting extends Component {
     return (
       <Container>
         <Header>
-          <StudyTitle>심리상담</StudyTitle>
+          <StudyTitle>mAInd</StudyTitle>
         </Header>
         <Middle>
           {this.state.session === undefined ? (
@@ -151,6 +151,7 @@ class OnlineMeeting extends Component {
               id="join"
             >
               <div>
+                <h1 style={{ color: "white" }}> Join a video session </h1>
                 <form
                   style={{ display: "flex", justifyContent: "center" }}
                   className="form-group"
@@ -161,7 +162,7 @@ class OnlineMeeting extends Component {
                       className="btn btn-lg btn-success"
                       name="commit"
                       type="submit"
-                      value="입장"
+                      value="JOIN"
                     />
                   </p>
                 </form>
@@ -182,6 +183,11 @@ class OnlineMeeting extends Component {
                       />
                     </StreamContainer>
                   ) : null}
+                  {this.state.subscribers.map((sub) => (
+                    <StreamContainer key={sub.stream.streamId}>
+                      <UserVideoComponent streamManager={sub} />
+                    </StreamContainer>
+                  ))}
                 </StreamContainerWrapper>
               ) : null}
             </VideoContainer>
@@ -233,7 +239,7 @@ class OnlineMeeting extends Component {
     this.userRef = React.createRef();
 
     this.state = {
-      mySessionId: "SessionA",
+      mySessionId: "SessionABC",
       myUserName: "Participant" + Math.floor(Math.random() * 100),
       session: undefined,
       mainStreamManager: undefined,
@@ -247,6 +253,7 @@ class OnlineMeeting extends Component {
 
     this.joinSession = this.joinSession.bind(this);
     this.leaveSession = this.leaveSession.bind(this);
+    this.handleMainVideoStream = this.handleMainVideoStream.bind(this);
     this.onbeforeunload = this.onbeforeunload.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
   }
@@ -261,24 +268,27 @@ class OnlineMeeting extends Component {
     window.removeEventListener("beforeunload", this.onbeforeunload);
   }
 
-  onbeforeunload(e) {
+  onbeforeunload() {
     this.leaveSession();
   }
 
   // 화상회의 나갈때
   leaveSession() {
+    // --- 7) Leave the session by calling 'disconnect' method over the Session object ---
+
     const mySession = this.state.session;
 
     if (mySession) {
       mySession.disconnect();
     }
 
+    // Empty all properties...
     this.OV = null;
     this.setState({
       session: undefined,
       subscribers: [],
-      mySessionId: undefined,
-      myUserName: undefined,
+      mySessionId: "SessionA",
+      myUserName: "Participant" + Math.floor(Math.random() * 100),
       mainStreamManager: undefined,
       publisher: undefined,
     });
@@ -430,66 +440,26 @@ class OnlineMeeting extends Component {
     return await this.createToken(sessionId);
   }
 
-  createSession(sessionId) {
-    return new Promise((resolve, reject) => {
-      let data = JSON.stringify({ customSessionId: sessionId });
-
-      axios
-        .post(OPENVIDU_SERVER_URL + "/openvidu/api/sessions", data, {
-          headers: {
-            Authorization: `Basic ${btoa(
-              `OPENVIDUAPP:${OPENVIDU_SERVER_SECRET}`
-            )}`,
-            "Content-Type": "application/json",
-          },
-        })
-        .then((res) => {
-          resolve(res.data.id);
-        })
-        .catch((res) => {
-          let error = Object.assign({}, res);
-
-          if (error?.response?.status === 409) {
-            resolve(sessionId);
-          } else if (
-            window.confirm(
-              'No connection to OpenVidu Server. This may be a certificate error at "' +
-                OPENVIDU_SERVER_URL +
-                '"\n\nClick OK to navigate and accept it. If no certifica' +
-                "te warning is shown, then check that your OpenVidu Server is up and running at" +
-                ' "' +
-                OPENVIDU_SERVER_URL +
-                '"'
-            )
-          ) {
-            window.location.assign(OPENVIDU_SERVER_URL + "/accept-certificate");
-          }
-        });
-    });
+  async createSession(sessionId) {
+    const response = await axios.post(
+      APPLICATION_SERVER_URL + "api/sessions",
+      { customSessionId: sessionId },
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    return response.data; // The sessionId
   }
 
-  createToken(sessionId) {
-    return new Promise((resolve, reject) => {
-      let data = {};
-
-      axios
-        .post(
-          `${OPENVIDU_SERVER_URL}/openvidu/api/sessions/${sessionId}/connection`,
-          data,
-          {
-            headers: {
-              Authorization: `Basic ${btoa(
-                `OPENVIDUAPP:${OPENVIDU_SERVER_SECRET}`
-              )}`,
-              "Content-Type": "application/json",
-            },
-          }
-        )
-        .then((res) => {
-          resolve(res.data.token);
-        })
-        .catch((error) => reject(error));
-    });
+  async createToken(sessionId) {
+    const response = await axios.post(
+      APPLICATION_SERVER_URL + "api/sessions/" + sessionId + "/connections",
+      {},
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    return response.data; // The token
   }
 }
 

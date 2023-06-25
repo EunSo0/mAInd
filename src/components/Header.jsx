@@ -1,10 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import logo from "../image/logo.png";
 
 const Base = styled.div`
   width: 100%;
-  height: 60px;
+  height: 4rem;
   posittion: fixed;
   top: 0;
   left: 0;
@@ -18,10 +19,10 @@ const List = styled.ul`
   display: flex;
 `;
 
-const Left = styled.li`
+const Logo = styled.img`
   display: flex;
   align-items: center;
-  height: 50px;
+  height: 4rem;
   flex-shrink: 0;
   &:not(:first-child) {
     margin: 0 0 0 10px;
@@ -31,7 +32,7 @@ const Left = styled.li`
 const Right = styled.li`
   display: flex;
   align-items: center;
-  height: 50px;
+  height: 4rem;
   flex-shrink: 1;
   margin: 0 0 0 auto;
 `;
@@ -60,7 +61,7 @@ export default function Header() {
       <Base>
         <List>
           <Link to="/">
-            <Left>mAInd</Left>
+            <Logo src={logo} alt="Logo" />
           </Link>
           <Right>
             <Link to="/meeting">
@@ -69,7 +70,9 @@ export default function Header() {
             <Link to="/initial_survey">
               <Menu>상담예약</Menu>
             </Link>
-            <Menu>상담 기록</Menu>
+            <Link to="/result">
+              <Menu>상담 기록</Menu>
+            </Link>
             <Link to="/login">
               <Sign isPrimaryBg={true}>로그인</Sign>
             </Link>
