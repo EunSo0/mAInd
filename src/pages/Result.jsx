@@ -141,6 +141,7 @@ const Input = styled.textarea`
   border: 1px solid;
   border-radius: 3px;
   text-align: left;
+  padding: 15px;
 `;
 
 function Result() {
