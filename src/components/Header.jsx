@@ -3,10 +3,53 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Modal from "../components/LoginModal";
 
+export default function Header() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  return (
+    <>
+      <Wrapper>
+        <Inner>
+          <LogoWrapper>
+            <Link to="/">
+              <Logo>mAInd</Logo>
+              <LogoTxt>비대면 심리 상담 서비스</LogoTxt>
+            </Link>
+          </LogoWrapper>
+
+          {/* <NavLinks>
+          <NavLink>
+            <Link to="/meeting">상담하기</Link>
+          </NavLink>
+          <NavLink>
+            <Link to="/initial_survey">상담예약</Link>
+          </NavLink>
+          <NavLink>
+            <Link to="/result">상담기록</Link>
+          </NavLink>
+          <NavLink> */}
+
+          <Link to="/">
+            <Login onClick={() => setIsModalOpen(true)}>로그인/회원가입</Login>
+          </Link>
+
+          {/* </NavLink>
+        </NavLinks> */}
+        </Inner>
+      </Wrapper>
+      {isModalOpen && <Modal isOpen={isModalOpen} onClose={closeModal} />}
+    </>
+  );
+}
+
 const Wrapper = styled.header`
   width: 100%;
   height: 64px;
-  position: fixed;
+  position: sticky;
   top: 0;
   left: 0;
   right: 0;
@@ -78,46 +121,3 @@ const Login = styled.div`
   margin-left: 50px;
   border-radius: 16px;
 `;
-
-export default function Header() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
-  return (
-    <>
-      <Wrapper>
-        <Inner>
-          <LogoWrapper>
-            <Link to="/">
-              <Logo>mAInd</Logo>
-              <LogoTxt>비대면 심리 상담 서비스</LogoTxt>
-            </Link>
-          </LogoWrapper>
-
-          {/* <NavLinks>
-          <NavLink>
-            <Link to="/meeting">상담하기</Link>
-          </NavLink>
-          <NavLink>
-            <Link to="/initial_survey">상담예약</Link>
-          </NavLink>
-          <NavLink>
-            <Link to="/result">상담기록</Link>
-          </NavLink>
-          <NavLink> */}
-
-          <Link to="/">
-            <Login onClick={() => setIsModalOpen(true)}>로그인/회원가입</Login>
-          </Link>
-
-          {/* </NavLink>
-        </NavLinks> */}
-        </Inner>
-      </Wrapper>
-      {isModalOpen && <Modal isOpen={isModalOpen} onClose={closeModal} />}
-    </>
-  );
-}

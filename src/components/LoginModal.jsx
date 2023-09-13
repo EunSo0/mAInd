@@ -3,6 +3,55 @@ import styled from "styled-components";
 import { AiOutlineClose } from "react-icons/ai";
 import Google from "../image/goggle.png";
 
+// eslint-disable-next-line react/prop-types
+export default function LoginModal({ isOpen, onClose }) {
+  useEffect(() => {
+    // 모달이 열릴 때 body의 스크롤을 막음
+    if (isOpen) {
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.overflow = "hidden";
+    } else {
+      // 모달이 닫힐 때 스크롤을 다시 활성화
+      document.documentElement.style.overflow = "auto";
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      // 컴포넌트가 언마운트 될 때 스크롤을 다시 활성화
+      document.documentElement.style.overflow = "auto";
+      document.body.style.overflow = "auto";
+    };
+  }, [isOpen]);
+  return (
+    <>
+      <Base onClick={onClose}>
+        <Modal onClick={(e) => e.stopPropagation()}>
+          <Close onClick={onClose}>
+            <AiOutlineClose />
+          </Close>
+          <ModalContents>
+            <Title>시작하기</Title>
+            <Btn>
+              <GoogleLogo />
+              <SignTxt>Google로 계속하기</SignTxt>
+            </Btn>
+            <TextWrapper>
+              <Text>mAInd 서비스 필수 동의 항목</Text>
+              <PolicyWrapper>
+                <TextPolicy>개인정보 수집이용 동의</TextPolicy>
+                <p>, </p>
+                <TextPolicy>개인정보 제3자 제공 동의</TextPolicy>
+                <p>에 동의하시면</p>
+              </PolicyWrapper>
+              <Text>위의 버튼을 눌러 시작해주세요</Text>
+            </TextWrapper>
+          </ModalContents>
+        </Modal>
+      </Base>
+    </>
+  );
+}
+
 const Base = styled.div`
   position: fixed;
   top: 0;
@@ -102,52 +151,3 @@ const TextPolicy = styled.p`
   font-size: 14px;
   line-height: 1.25rem;
 `;
-
-// eslint-disable-next-line react/prop-types
-export default function LoginModal({ isOpen, onClose }) {
-  useEffect(() => {
-    // 모달이 열릴 때 body의 스크롤을 막음
-    if (isOpen) {
-      document.documentElement.style.overflow = "hidden";
-      document.body.style.overflow = "hidden";
-    } else {
-      // 모달이 닫힐 때 스크롤을 다시 활성화
-      document.documentElement.style.overflow = "auto";
-      document.body.style.overflow = "auto";
-    }
-
-    return () => {
-      // 컴포넌트가 언마운트 될 때 스크롤을 다시 활성화
-      document.documentElement.style.overflow = "auto";
-      document.body.style.overflow = "auto";
-    };
-  }, [isOpen]);
-  return (
-    <>
-      <Base onClick={onClose}>
-        <Modal onClick={(e) => e.stopPropagation()}>
-          <Close onClick={onClose}>
-            <AiOutlineClose />
-          </Close>
-          <ModalContents>
-            <Title>시작하기</Title>
-            <Btn>
-              <GoogleLogo />
-              <SignTxt>Google로 계속하기</SignTxt>
-            </Btn>
-            <TextWrapper>
-              <Text>mAInd 서비스 필수 동의 항목</Text>
-              <PolicyWrapper>
-                <TextPolicy>개인정보 수집이용 동의</TextPolicy>
-                <p>, </p>
-                <TextPolicy>개인정보 제3자 제공 동의</TextPolicy>
-                <p>에 동의하시면</p>
-              </PolicyWrapper>
-              <Text>위의 버튼을 눌러 시작해주세요</Text>
-            </TextWrapper>
-          </ModalContents>
-        </Modal>
-      </Base>
-    </>
-  );
-}

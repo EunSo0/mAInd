@@ -2,90 +2,6 @@ import React from "react";
 import Header from "../components/Header";
 import styled from "styled-components";
 
-const All = styled.div`
-  width: 80%;
-  height: 100%;
-  margin: 0 auto;
-  padding: 100px 0;
-`;
-
-const Title = styled.h1`
-  text-align: center;
-  padding: 10px 0;
-`;
-
-const Wrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  margin: 50px;
-`;
-
-const ShortLabel = styled.label`
-  width: 200px;
-  font-size: 20px;
-  margin: 20px;
-  text-align: right;
-  padding: 7px 0px;
-`;
-
-const ShortInput = styled.input`
-  width: 200px;
-  height: 20px;
-  margin: 20px 5px;
-  padding: 10px 0;
-  font-size: 20px;
-  padding: 10px;
-  border: 1px solid;
-`;
-
-const Info = styled.div`
-  display: flex;
-  width: 80%;
-  margin: 0 auto;
-`;
-
-const Info2 = styled.div`
-  width: 80%;
-  margin: 0 auto;
-`;
-
-const Label = styled.label`
-  width: 200px;
-  height: 40px;
-  font-size: 20px;
-  margin: 20px;
-  text-align: right;
-  padding: 9px 0px;
-`;
-
-const LongLabel = styled.label`
-  font-size: 20px;
-  padding: 0 20px;
-`;
-
-const Input = styled.textarea`
-  width: 100%;
-  height: 100px;
-  margin: 20px;
-  padding: 10px;
-  font-size: 20px;
-  border: 1px solid;
-  border-radius: 3px;
-`;
-
-const Submit = styled.button`
-  justify-content: center;
-  background-color: #85b3cd;
-  border: 1px solid #85b3cd;
-  padding: 0.5rem 1.5rem;
-  border-radius: 6px;
-  font-size: 20px;
-  font-weight: bold;
-  margin: 50px 0;
-`;
-
 export default function InitialSurvey() {
   return (
     <>
@@ -205,3 +121,87 @@ export default function InitialSurvey() {
     </>
   );
 }
+
+const All = styled.div`
+  width: 80%;
+  height: 100%;
+  margin: 0 auto;
+  padding: 100px 0;
+`;
+
+const Title = styled.h1`
+  text-align: center;
+  padding: 10px 0;
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 50px;
+`;
+
+const ShortLabel = styled.label`
+  width: 200px;
+  font-size: 20px;
+  margin: 20px;
+  text-align: right;
+  padding: 7px 0px;
+`;
+
+const ShortInput = styled.input`
+  width: 200px;
+  height: 20px;
+  margin: 20px 5px;
+  padding: 10px 0;
+  font-size: 20px;
+  padding: 10px;
+  border: 1px solid;
+`;
+
+const Info = styled.div`
+  display: flex;
+  width: 80%;
+  margin: 0 auto;
+`;
+
+const Info2 = styled.div`
+  width: 80%;
+  margin: 0 auto;
+`;
+
+const Label = styled.label`
+  width: 200px;
+  height: 40px;
+  font-size: 20px;
+  margin: 20px;
+  text-align: right;
+  padding: 9px 0px;
+`;
+
+const LongLabel = styled.label`
+  font-size: 20px;
+  padding: 0 20px;
+`;
+
+const Input = styled.textarea`
+  width: 100%;
+  height: 100px;
+  margin: 20px;
+  padding: 10px;
+  font-size: 20px;
+  border: 1px solid;
+  border-radius: 3px;
+`;
+
+const Submit = styled.button`
+  justify-content: center;
+  background-color: #85b3cd;
+  border: 1px solid #85b3cd;
+  padding: 0.5rem 1.5rem;
+  border-radius: 6px;
+  font-size: 20px;
+  font-weight: bold;
+  margin: 50px 0;
+`;
