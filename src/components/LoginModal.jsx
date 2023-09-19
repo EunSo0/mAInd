@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { AiOutlineClose } from "react-icons/ai";
 import Google from "../image/goggle.png";
 
@@ -22,6 +22,7 @@ export default function LoginModal({ isOpen, onClose }) {
       document.body.style.overflow = "auto";
     };
   }, [isOpen]);
+
   return (
     <>
       <Base onClick={onClose}>
@@ -100,6 +101,7 @@ const Title = styled.div`
   font-weight: 700;
   font-size: 40px;
   line-height: 2.5rem;
+  margin-bottom: 30px;
 `;
 
 const Btn = styled.button`

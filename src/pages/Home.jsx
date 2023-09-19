@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Modal from "../components/LoginModal";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import Img from "../image/HomeMan.png";
 
 export default function Home() {
