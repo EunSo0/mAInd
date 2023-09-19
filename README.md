@@ -1,5 +1,7 @@
 # maind
 
+css : styled-component 사용
+
 ---
 
 # commit message 규칙
