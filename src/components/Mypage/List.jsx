@@ -10,6 +10,7 @@ const Wrapper = styled.div`
   padding: 28px;
   box-shadow: 0px 1px 6px 0px rgba(0, 0, 0, 0.3);
   margin: 100px;
+  margin-left: 30px;
 `;
 const ListWrapper = styled.div`
   display: flex;

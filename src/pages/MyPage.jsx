@@ -1,11 +1,8 @@
 import React from "react";
 import styled from "@emotion/styled";
-
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import Profile from "../components/Mypage/Profile";
-import List from "../components/Mypage/List";
-//import Detail from "../components/Mypage/DetailList";
+import Profile from "../components/MyPage/Profile";
+//import List from "../components/MyPage/List";
+import Detail from "../components/MyPage/DetailList";
 
 const Base = styled.div`
   width: 100%;
@@ -19,14 +16,10 @@ const Base = styled.div`
 export default function MyPage() {
   return (
     <>
-      <Header />
-
       <Base>
         <Profile></Profile>
-        <List></List>
+        <Detail></Detail>
       </Base>
-
-      <Footer />
     </>
   );
 }
