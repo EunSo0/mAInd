@@ -3,6 +3,12 @@ import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 // import Modal from "../components/LoginModal";
 
+const MenuList = [
+  { name: "상담하기", page: "/meeting" },
+  { name: "상담예약", page: "/initial_survey" },
+  { name: "마이페이지", page: "/mypage" },
+];
+
 export default function Header() {
   const [isLogin, setIsLogin] = useState(false);
   // const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,16 +34,11 @@ export default function Header() {
           {isLogin && (
             <LinkWrapper>
               <NavLinks>
-                <NavLink>
-                  <Link to="/meeting">상담하기</Link>
-                </NavLink>
-                <NavLink>
-                  <Link to="/initial_survey">상담예약</Link>
-                </NavLink>
-                <NavLink>
-                  <Link to="/mypage">마이페이지</Link>
-                </NavLink>
-                <NavLink></NavLink>
+                {MenuList.map((el) => (
+                  <NavLink key={el.page}>
+                    <Link to={el.page}>{el.name}</Link>
+                  </NavLink>
+                ))}
               </NavLinks>
               <Name>김상담님</Name>
               <RoleBtn>상담자</RoleBtn>
@@ -111,7 +112,7 @@ const NavLinks = styled.div`
 
 const NavLink = styled.div`
   margin: 0 20px;
-  font-size: 20px;
+  font-size: 18px;
   color: #666;
   font-family: "Montserrat", sans-serif;
   transition: color 0.4s;

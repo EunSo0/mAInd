@@ -175,11 +175,13 @@ const InputBox = styled.input`
   border: 1px solid #868686;
   background: #fff;
   padding-left: 12px;
+  font-size: 18px;
 `;
 const BirthDatePicker = styled(DatePicker)`
   width: 320px;
   height: 48px;
   border: 1px solid #868686;
+  font-size: 18px;
 `;
 const RadioWrapper = styled.div`
   margin-right: 15px;
@@ -225,7 +227,7 @@ const CustomCheckbox = styled.input`
 
   &:checked + label {
     border: 1px solid #36f;
-    background: #eff1ff;
+    background: #e0e6ff;
   }
 `;
 const CustomLabel = styled.label`
@@ -256,6 +258,7 @@ const Answer = styled.textarea`
   background: #fff;
   padding: 10px;
   resize: none;
+  font-size: 18px;
 `;
 const SubmitBtn = styled.div`
   width: 390px;
