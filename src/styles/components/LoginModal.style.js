@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import Google from "../../image/goggle.png";
+import Google from "../../images/goggle.png";
 
 export const Base = styled.div`
   position: fixed;
@@ -51,14 +51,14 @@ export const Title = styled.div`
   line-height: 2.5rem;
 `;
 
-export const Btn = styled.button`
+export const Btn = styled.a`
   border-radius: 30px;
   background-color: #fffc;
   position: relative;
   margin: 0 auto;
   height: 60px;
   width: 412px;
-  border-width: 1px;
+  border: 1px solid #9f9f9f;
   cursor: pointer;
   display: flex;
   align-items: center;

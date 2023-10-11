@@ -17,7 +17,7 @@ export const Title = styled.div`
 `;
 
 export const Wrapper = styled.div`
-  width: 1200px;
+  width: 1100px;
   height: 100%;
   border-radius: 16px;
   border: 1px solid #868686;
@@ -34,7 +34,7 @@ export const InputWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  margin-bottom: 20px;
+  margin-top: 10px;
 `;
 export const Label = styled.div`
   width: 130px;
@@ -50,6 +50,15 @@ export const InputBox = styled.input`
   background: #fff;
   padding-left: 12px;
   font-size: 18px;
+`;
+export const TextBox = styled.div`
+  width: 320px;
+  height: 48px;
+  border: 1px solid #868686;
+  background: #fff;
+  padding-left: 10px;
+  font-size: 22px;
+  line-height: 48px;
 `;
 export const BirthDatePicker = styled(DatePicker)`
   width: 320px;
@@ -109,10 +118,17 @@ export const CustomLabel = styled.label`
   height: 3.5rem;
   cursor: pointer;
   border-radius: 2rem;
-  background-color: #f2f4f6;
+  background-color: #fff;
   font-size: 24px;
   color: #383838;
   border: 1px solid #868686;
+
+  &.symptom {
+    cursor: auto;
+    border: 1px solid #36f;
+    background: #e0e6ff;
+    margin-right: 8px;
+  }
 `;
 
 export const QuestionWrapper = styled.div`
@@ -134,17 +150,69 @@ export const Answer = styled.textarea`
   resize: none;
   font-size: 18px;
 `;
-export const SubmitBtn = styled.div`
+export const AnswerBox = styled.div`
+  width: 998px;
+  border: 1px solid #868686;
+  background: #fff;
+  padding: 20px 10px;
+  font-size: 18px;
+  margin-bottom: 40px;
+`;
+export const ErrorText = styled.span`
+  display: block;
+  font-size: 14px;
+  color: red;
+  font-weight: 500;
+  margin-left: 135px;
+  margin-bottom: 20px;
+`;
+export const ErrorText2 = styled.span`
+  display: block;
+  font-size: 14px;
+  color: red;
+  font-weight: 500;
+`;
+export const SubmitBtn = styled.button`
   width: 390px;
   padding: 28px 0;
   margin: 0 auto;
-  margin-top: 200px;
   text-align: center;
   border-radius: 16px;
+  border: none;
   background: #36f;
   color: #fff;
   font-size: 24px;
   font-weight: 500;
   line-height: 24px;
   cursor: pointer;
+`;
+
+export const ButtonWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 200px;
+`;
+export const Button = styled.button`
+  display: flex;
+  width: 288px;
+  height: 64px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 16px;
+  border: 1px solid #36f;
+  background: #eff1ff;
+  color: #000;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 24px;
+  margin: 10px;
+  cursor: pointer;
+
+  &.approve {
+    background: #36f;
+    color: #fff;
+  }
 `;

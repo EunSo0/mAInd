@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
-import Img from "../../image/HomeMan.png";
+import Img from "../../images/HomeMan.png";
 
 export const ContentWrapper = styled.div`
   width: 100%;
-  height: 100vh;
+  height: calc(100vh - 148px);
   overflow-x: hidden;
   background-color: #eff1ff;
   display: flex;

@@ -1,12 +1,30 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import React, { useEffect } from "react";
-import * as M from "../styles/components/LoginModal";
+import * as M from "../../styles/components/LoginModal.style";
 import { AiOutlineClose } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
+// import GoogleLogin from "../components/GoogleLogin";
+//import { useGoogleLogin } from "@react-oauth/google";
+//import jwtDecode from "jwt-decode";
 
-// eslint-disable-next-line react/prop-types
-export default function LoginModal({ isOpen, onClose }) {
+export default function LoginModal({
+  isLoginModalOpen,
+  setIsLoginModalOpen,
+  isLogin,
+  setIsLogin,
+}) {
+  const onClickClose = () => {
+    setIsLoginModalOpen(!isLoginModalOpen);
+  };
+  const onClickLogin = () => {
+    setIsLogin(!isLogin);
+    setIsLoginModalOpen(!isLoginModalOpen);
+  };
+
   useEffect(() => {
     // 모달이 열릴 때 body의 스크롤을 막음
-    if (isOpen) {
+    if (isLoginModalOpen) {
       document.documentElement.style.overflow = "hidden";
       document.body.style.overflow = "hidden";
       document.body.style.paddingRight = "17px";
@@ -23,20 +41,24 @@ export default function LoginModal({ isOpen, onClose }) {
       document.body.style.overflow = "auto";
       document.body.style.paddingRight = "0";
     };
-  }, [isOpen]);
+  }, [isLoginModalOpen]);
+
+  const navigate = useNavigate();
+
   return (
     <>
-      <M.Base onClick={onClose}>
+      <M.Base onClick={onClickClose}>
         <M.Modal onClick={(e) => e.stopPropagation()}>
-          <M.Close onClick={onClose}>
+          <M.Close onClick={onClickClose}>
             <AiOutlineClose />
           </M.Close>
           <M.ModalContents>
             <M.Title>시작하기</M.Title>
-            <M.Btn>
-              <M.GoogleLogo />
-              <M.SignTxt>Google로 계속하기</M.SignTxt>
+            <M.Btn href="https://maind.site/oauth2/authorization/google">
+              <M.GoogleLogo></M.GoogleLogo>
+              <M.SignTxt>Google로 시작하기</M.SignTxt>
             </M.Btn>
+            {/* <GoogleLogin onGoogleSignIn={onGoogleSignIn} text="로그인" /> */}
             <M.TextWrapper>
               <M.Text>mAInd 서비스 필수 동의 항목</M.Text>
               <M.PolicyWrapper>
