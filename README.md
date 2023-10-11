@@ -1,9 +1,10 @@
 # maind
 
-css: @emotion/styled 사용
-styles 폴더에서 따로 작성해서 import 해와서 사용
+css : styled-component 사용
 
-font: 영어 "Poppins" / 한글 "Noto Sans KR" (한글은 전역스타일 적용해놓음)
+전역 상태 관리 : recoil
+
+서버 상태 관리 : react-query
 
 ---
 

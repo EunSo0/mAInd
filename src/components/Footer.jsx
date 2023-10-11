@@ -1,5 +1,5 @@
 import React from "react";
-import * as F from "../styles/components/Footer.styles";
+import * as F from "../styles/components/Footer.styles.js";
 import { Link } from "react-router-dom";
 // import { LiaUserCircle } from "react-icons/lia";
 

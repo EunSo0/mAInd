@@ -87,6 +87,7 @@ export const RoleBtn = styled.div`
   font-size: 16px;
   font-weight: 500;
   line-height: 24px;
+  cursor: pointer;
 `;
 
 export const Login = styled.div`

@@ -1,13 +1,18 @@
-import React, { useState } from "react";
-
-import Modal from "../components/LoginModal";
+import React from "react";
+import { useRecoilState } from "recoil";
+import { loginState, loginModalState } from "../recoil/atom";
+import LoginModal from "../components/login/LoginModal";
 import * as H from "../styles/pages/Home.style";
 
-export default function Home() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+//export const BASE_URL = "http://maind.site";
 
-  const closeModal = () => {
-    setIsModalOpen(false);
+export default function Home() {
+  const [isLogin, setIsLogin] = useRecoilState(loginState);
+  const [isLoginModalOpen, setIsLoginModalOpen] =
+    useRecoilState(loginModalState);
+
+  const clickLoginBtn = () => {
+    setIsLoginModalOpen((prev) => !prev);
   };
   return (
     <>
@@ -22,11 +27,18 @@ export default function Home() {
           </H.ContentTxtWrapper>
           <H.ManImg />
         </H.Content>
-        <H.StartBtn onClick={() => setIsModalOpen(true)}>
-          지금 바로 시작하기
-        </H.StartBtn>
+        {!isLogin && (
+          <H.StartBtn onClick={clickLoginBtn}>지금 바로 시작하기</H.StartBtn>
+        )}
       </H.ContentWrapper>
-      {isModalOpen && <Modal isOpen={isModalOpen} onClose={closeModal} />}
+      {isLoginModalOpen && (
+        <LoginModal
+          isLoginModalOpen={isLoginModalOpen}
+          setIsLoginModalOpen={setIsLoginModalOpen}
+          isLogin={isLogin}
+          setIsLogin={setIsLogin}
+        />
+      )}
     </>
   );
 }
