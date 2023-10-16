@@ -1,8 +1,7 @@
 import styled from "@emotion/styled";
 
 export const Wrapper = styled.div`
-  width: 389px;
-  height: 300px;
+  height: 100%;
   border-radius: 8px;
   border-top: 24px solid #36f;
   padding: 28px;
@@ -28,11 +27,15 @@ export const ProfileTitle = styled.div`
 export const Role = styled.div`
   padding: 4px 16px;
   border-radius: 16px;
-  background: #36f;
+  background: #14ae5c;
   color: #fff;
   font-size: 16px;
   font-weight: 400;
   line-height: 24px;
+
+  &.client {
+    background: #36f;
+  }
 `;
 export const ContentWrapper = styled.div`
   display: flex;
@@ -45,13 +48,28 @@ export const ContentList = styled.div`
   margin: 8px 0;
 `;
 export const Title = styled.div`
-  width: 100px;
+  width: 110px;
   color: #666;
   font-size: 20px;
   font-weight: 400;
+  line-height: 2.1rem;
 `;
 export const Content = styled.div`
   color: #000;
   font-size: 20px;
   font-weight: 400;
+`;
+
+export const Btn = styled.button`
+  border-radius: 8px;
+  background: #666;
+  padding: 5px 24px;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+
+  &.none {
+    cursor: auto;
+  }
 `;

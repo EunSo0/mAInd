@@ -55,4 +55,8 @@ export const ResultBtn = styled.button`
   font-weight: 300;
   border: none;
   cursor: pointer;
+
+  &.upload {
+    background: #666;
+  }
 `;

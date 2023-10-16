@@ -17,11 +17,10 @@ export const ModalWrapper = styled.div`
   border-radius: 8px;
   background-color: #fff;
 `;
-export const Profile = styled.div`
+export const Profile = styled.img`
   width: 72px;
   height: 72px;
   border-radius: 72px;
-  background-color: grey;
 `;
 export const Name = styled.div`
   color: #000;

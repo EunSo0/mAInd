@@ -1,14 +1,12 @@
-/* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { reservationState } from "../../recoil/atom";
-import { Link } from "react-router-dom";
-import { useForm, Controller } from "react-hook-form";
-import { ErrorMessage } from "@hookform/error-message";
+import { surveyState } from "../../recoil/atom";
+import { useForm } from "react-hook-form";
 import * as I from "../../styles/pages/InitialSurvey.style";
 import InputDatePicker from "../../components/DatePicker";
-import axios from "axios";
+import { useMutation } from "react-query";
+import { submitInitialSurvey } from "./../../api/api";
 
 const symptomData = [
   { id: 1, name: "우울" },
@@ -30,9 +28,8 @@ export default function InitialSurvey() {
     setValue,
     getValues,
   } = useForm();
-  const [isReservation, seIsReservation] = useRecoilState(reservationState);
-  const [selectedSymptoms, setSelectedSymptoms] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [, seIsSubmitSurvey] = useRecoilState(surveyState);
+  const { mutate, status } = useMutation("submitSurvey", submitInitialSurvey);
 
   const handleCheckboxChange = (id) => {
     const currentValues = getValues().symptoms || [];
@@ -47,67 +44,31 @@ export default function InitialSurvey() {
   };
 
   const onClickSubmit = () => {
-    seIsReservation(true);
+    seIsSubmitSurvey(true);
   };
 
-  const onSubmit = async (data) => {
-    setLoading(true);
-    console.log(data);
-
-    const {
-      name,
-      gender,
-      email,
-      birth,
-      phone,
-      education,
-      q_1,
-      q_2,
-      q_3,
-      q_4,
-      q_5,
-      q_6,
-      q_7,
-      q_8,
-    } = data;
-    try {
-      const response = await axios.post(
-        "/mypage/surveys",
-        {
-          name,
-          gender,
-          email,
-          birth,
-          phone,
-          education,
-          q_1,
-          q_2,
-          q_3,
-          q_4,
-          q_5,
-          q_6,
-          q_7,
-          q_8,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      console.log(response.data);
-      navigate("/reservation/client");
-    } catch (error) {
-      alert(error.response.data);
-    }
+  const onSubmitSurvey = (data) => {
+    mutate(data, {
+      onSuccess: (response) => {
+        console.log(response);
+        navigate("/reservation/client");
+      },
+      onError: (error) => {
+        console.error(error);
+        alert(JSON.stringify(error.response.data));
+      },
+    });
   };
+
+  if (status === "loading") {
+    return <p>Loading user data...</p>;
+  }
 
   return (
     <>
       <I.Base>
         <I.Title>초기 설문지</I.Title>
-        <form onSubmit={handleSubmit(onSubmit)} method="GET">
+        <form onSubmit={handleSubmit(onSubmitSurvey)}>
           <I.Wrapper>
             <I.InfoWrapper>
               <I.InputWrapper>
@@ -162,7 +123,7 @@ export default function InitialSurvey() {
                 <I.GenderRadio
                   type="radio"
                   name="gender"
-                  value="남자"
+                  value="남"
                   {...register("gender", { required: "성별을 선택해주세요" })}
                 />
                 <I.GenderLabel>남자</I.GenderLabel>
@@ -171,7 +132,7 @@ export default function InitialSurvey() {
                 <I.GenderRadio
                   type="radio"
                   name="gender"
-                  value="여자"
+                  value="여"
                   {...register("gender", { required: "성별을 선택해주세요" })}
                 />
                 <I.GenderLabel>여자</I.GenderLabel>
@@ -192,7 +153,7 @@ export default function InitialSurvey() {
                         getValues().symptoms.includes(symptom.id)
                       }
                       onChange={() => handleCheckboxChange(symptom.id)}
-                      {...register("symptom")}
+                      {...register("symptoms")}
                     />
                     <I.CustomLabel htmlFor={`symptom-${symptom.id}`}>
                       {symptom.name}
@@ -258,14 +219,11 @@ export default function InitialSurvey() {
               />
               <I.ErrorText2>{errors?.q_8?.message}</I.ErrorText2>
             </I.QuestionWrapper>
-
-            {/* <Link to="/reservation/client"> */}
             <I.ButtonWrapper>
               <I.SubmitBtn type="submit" onClick={onClickSubmit}>
                 제출하기
               </I.SubmitBtn>
             </I.ButtonWrapper>
-            {/* </Link> */}
           </I.Wrapper>
         </form>
       </I.Base>

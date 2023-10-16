@@ -3,29 +3,13 @@ import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 import * as T from "../../styles/components/mypage/Table.style";
 import Img from "../../images/counselImg.png";
-
-const ClientList = [
-  {
-    apply_date: "23.09.12",
-    name: "김내담",
-    birth: "00.04.10",
-    symptom: "우울",
-    status: "확인 전",
-    after_date: "확인 전",
-  },
-  {
-    apply_date: "23.09.10",
-    name: "차덕성",
-    birth: "98.02.21",
-    symptom: "수면 장애",
-    status: "승인",
-    after_date: "23.09.10",
-  },
-];
+import { DateFormat } from "./../../utils/DateFormat";
+import { getReservationList } from "../../api/api";
+import { useQuery } from "react-query";
 
 export const Base = styled.div`
   width: 100%;
-  height: calc(100vh - 148px);
+  min-height: 800px;
   overflow-x: hidden;
   background-color: #eff1ff;
   display: flex;
@@ -51,35 +35,58 @@ export const CounselImg = styled.div`
   margin-bottom: 20px;
 `;
 export default function Reservation() {
+  const { data, isLoading, isError } = useQuery("userInfo", getReservationList);
+
+  if (isLoading) {
+    return <p>Loading user data...</p>;
+  } else if (isError) {
+    return <p>Error fetching user data</p>;
+  }
+
+  // userData를 사용하여 데이터 표시
+  console.log(data);
   return (
     <Base>
       <Title>신규 상담 신청 내역이 1건 있습니다.</Title>
       <T.ChartWrapper>
         <T.Chart>
-          <T.ChartTr>
-            <T.ChartTh>번호</T.ChartTh>
-            <T.ChartTh>신청일자</T.ChartTh>
-            <T.ChartTh>이름</T.ChartTh>
-            <T.ChartTh>생년월일</T.ChartTh>
-            <T.ChartTh>증상</T.ChartTh>
-            <T.ChartTh>승인/거절 일자</T.ChartTh>
-            <T.ChartTh>초기설문지</T.ChartTh>
-          </T.ChartTr>
-          {ClientList.map((el, index) => (
-            <T.ChartTr key={index}>
-              <T.ChartTd>{el.apply_date}</T.ChartTd>
-              <T.ChartTd>{el.name}</T.ChartTd>
-              <T.ChartTd>{el.birth}</T.ChartTd>
-              <T.ChartTd>{el.symptom}</T.ChartTd>
-              <T.ChartTd>{el.status}</T.ChartTd>
-              <T.ChartTd>{el.after_date}</T.ChartTd>
-              <T.ChartTd>
-                <Link to="/initialSurvey/counselor">
-                  <T.ResultBtn>초기설문지</T.ResultBtn>
-                </Link>
-              </T.ChartTd>
+          <thead>
+            <T.ChartTr>
+              <T.ChartTh>번호</T.ChartTh>
+              <T.ChartTh>신청일자</T.ChartTh>
+              <T.ChartTh>이름</T.ChartTh>
+              <T.ChartTh>생년월일</T.ChartTh>
+              <T.ChartTh>증상</T.ChartTh>
+              <T.ChartTh>승인/거절 일자</T.ChartTh>
+              <T.ChartTh>초기설문지</T.ChartTh>
             </T.ChartTr>
-          ))}
+          </thead>
+          <tbody>
+            {data.name ??
+              data.map((el, index) => (
+                <T.ChartTr key={index}>
+                  <T.ChartTd>{index + 1}</T.ChartTd>
+                  <T.ChartTd>{DateFormat(el.createdDate)}</T.ChartTd>
+                  <T.ChartTd>{el.name}</T.ChartTd>
+                  <T.ChartTd>{DateFormat(el.birth)}</T.ChartTd>
+                  <T.ChartTd>{el.symptoms.join(", ")}</T.ChartTd>
+                  {el.applyStatus === "ACCEPT" ? (
+                    <T.ChartTd>{DateFormat(el.statusDate)}</T.ChartTd>
+                  ) : el.applyStatus === "REJECT" ? (
+                    <T.ChartTd>거절</T.ChartTd>
+                  ) : el.applyStatus === "HOLD" ? (
+                    <T.ChartTd>보류</T.ChartTd>
+                  ) : (
+                    <T.ChartTd>확인 전</T.ChartTd>
+                  )}
+                  <T.ChartTd>
+                    <Link to={`/initialSurvey/${el.survey_id}`}>
+                      <T.ResultBtn>초기설문지</T.ResultBtn>
+                    </Link>
+                  </T.ChartTd>
+                </T.ChartTr>
+              ))}
+          </tbody>
         </T.Chart>
       </T.ChartWrapper>
       <CounselImg />

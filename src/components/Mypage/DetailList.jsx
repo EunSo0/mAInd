@@ -40,24 +40,28 @@ export default function DetailList() {
 
       <T.ChartWrapper>
         <T.Chart>
-          <T.ChartTr>
-            <T.ChartTh>상담회차</T.ChartTh>
-            <T.ChartTh>내담자명</T.ChartTh>
-            <T.ChartTh>상담일자</T.ChartTh>
-            <T.ChartTh>증상</T.ChartTh>
-            <T.ChartTh>상담일지</T.ChartTh>
-          </T.ChartTr>
-          {DetailListData.map((el) => (
-            <T.ChartTr key={el.num}>
-              <T.ChartTd>{el.num}</T.ChartTd>
-              <T.ChartTd>{el.name}</T.ChartTd>
-              <T.ChartTd>{el.date}</T.ChartTd>
-              <T.ChartTd>{el.symptom}</T.ChartTd>
-              <T.ChartTd>
-                {el.counsel ? <T.ResultBtn>상담일지</T.ResultBtn> : "제공전"}
-              </T.ChartTd>
+          <thead>
+            <T.ChartTr>
+              <T.ChartTh>상담회차</T.ChartTh>
+              <T.ChartTh>내담자명</T.ChartTh>
+              <T.ChartTh>상담일자</T.ChartTh>
+              <T.ChartTh>증상</T.ChartTh>
+              <T.ChartTh>상담일지</T.ChartTh>
             </T.ChartTr>
-          ))}
+          </thead>
+          <tbody>
+            {DetailListData.map((el) => (
+              <T.ChartTr key={el.num}>
+                <T.ChartTd>{el.num}</T.ChartTd>
+                <T.ChartTd>{el.name}</T.ChartTd>
+                <T.ChartTd>{el.date}</T.ChartTd>
+                <T.ChartTd>{el.symptom}</T.ChartTd>
+                <T.ChartTd>
+                  {el.counsel ? <T.ResultBtn>상담일지</T.ResultBtn> : "제공전"}
+                </T.ChartTd>
+              </T.ChartTr>
+            ))}
+          </tbody>
         </T.Chart>
       </T.ChartWrapper>
     </DL.Wrapper>

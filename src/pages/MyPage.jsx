@@ -8,7 +8,7 @@ import { detailState } from "../recoil/atom";
 
 const Base = styled.div`
   width: 100%;
-  min-height: 1000px;
+  min-height: 900px;
   display: flex;
   flex-direction: row;
   justify-content: center;

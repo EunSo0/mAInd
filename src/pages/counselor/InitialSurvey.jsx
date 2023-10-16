@@ -1,37 +1,73 @@
-/* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React from "react";
 import * as I from "../../styles/pages/InitialSurvey.style";
-import axios from "axios";
-import { useQuery } from "react-query";
-
-const surveyContent = {
-  name: "김내담",
-  email: "naedam@gamil.com",
-  phone: "01012345678",
-  birth: "2000년 4월 24일",
-  education: "덕성여자대학교 졸업",
-  gender: "여자",
-  symptom: ["우울", "급식 및 섭식 장애"],
-};
+import { useQuery, useMutation } from "react-query";
+import {
+  getInitialSurvey,
+  editInitialSurveyStatus,
+  deleteInitialSurvey,
+} from "../../api/api";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { roleState } from "../../recoil/atom";
+import { DateFormat } from "./../../utils/DateFormat";
 
 export default function InitialSurvey() {
-  const [result, setResult] = useState([]);
-  const token = localStorage.getItem("token");
+  const navigate = useNavigate();
+  const { survey_id } = useParams();
+  const [role] = useRecoilState(roleState);
 
-  const { data } = useQuery("getSurvey", () =>
-    axios
-      .get("/mypage/surveys/1", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      })
-      .then((data) => {
-        console.log(data.data);
-        setResult(data.data);
-      })
+  const {
+    data: result,
+    isLoading,
+    isError,
+  } = useQuery("initialSurvey", () => getInitialSurvey(survey_id));
+
+  const { mutate: editMutate, status: editStatus } = useMutation(
+    "editStatus",
+    editInitialSurveyStatus
   );
+  const { mutate: deleteMutate, status: deleteStatus } = useMutation(
+    "delete",
+    deleteInitialSurvey
+  );
+
+  if (isLoading) {
+    return <p>Loading user data...</p>;
+  } else if (isError) {
+    return <p>Error fetching user data</p>;
+  } else if (!result) {
+    return <p>No data available</p>;
+  }
+
+  const handleStatusChange = (newStatus) => {
+    const data = { surveyId: survey_id, status: newStatus };
+    console.log(data);
+
+    editMutate(data, {
+      onSuccess: (response) => {
+        console.log("Edit Mutation successful", response);
+      },
+      onError: (error) => {
+        console.error("Edit Mutation error", error);
+      },
+    });
+  };
+
+  const deleteClick = () => {
+    deleteMutate(survey_id, {
+      onSuccess: (response) => {
+        console.log("Delete Mutation successful", response);
+        navigate("/mypage");
+      },
+      onError: (error) => {
+        console.error("Delete Mutation error", error);
+      },
+    });
+  };
+
+  if (editStatus === "loading" || deleteStatus === "loading") {
+    return <p>Loading user data...</p>;
+  }
 
   return (
     <>
@@ -53,7 +89,7 @@ export default function InitialSurvey() {
             </I.InputWrapper>
             <I.InputWrapper>
               <I.Label>생년월일</I.Label>
-              <I.TextBox>{result.birth}</I.TextBox>
+              <I.TextBox>{DateFormat(result.birth)}</I.TextBox>
             </I.InputWrapper>
             <I.InputWrapper>
               <I.Label>학력</I.Label>
@@ -68,11 +104,12 @@ export default function InitialSurvey() {
           </I.InputWrapper>
           <I.InputWrapper>
             <I.Label>증상</I.Label>
-            {surveyContent.symptom.map((item, index) => (
-              <I.CustomLabel key={index} className="symptom">
-                {item}
-              </I.CustomLabel>
-            ))}
+            {result.symptoms &&
+              result.symptoms.map((item, index) => (
+                <I.CustomLabel key={index} className="symptom">
+                  {item}
+                </I.CustomLabel>
+              ))}
           </I.InputWrapper>
           <I.QuestionWrapper>
             <I.Question>1. 당신의 증상 및 문제행동은 무엇입니까?</I.Question>
@@ -106,14 +143,50 @@ export default function InitialSurvey() {
             <I.Question>8. 상담을 통해 어떤 결과를 원하시나요?</I.Question>
             <I.AnswerBox>{result.q_8}</I.AnswerBox>
           </I.QuestionWrapper>
-
-          <Link to="/reservation/counselor">
-            <I.ButtonWrapper>
-              <I.Button className="approve">승인</I.Button>
-              <I.Button>보류</I.Button>
-              <I.Button>거절</I.Button>
-            </I.ButtonWrapper>
-          </Link>
+          <I.ButtonWrapper>
+            {result.applyStatus == "BEFORE" ? (
+              <>
+                {role == "CLIENT" ? (
+                  <>
+                    <Link to={`/initialSurvey/edit/${survey_id}`}>
+                      <I.Button className="approve">수정</I.Button>
+                    </Link>
+                    <I.Button onClick={deleteClick}>삭제</I.Button>
+                    <Link to={`/mypage`}>
+                      <I.Button className="close">닫기</I.Button>
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <I.Button
+                      className="approve"
+                      onClick={() => handleStatusChange("ACCEPT")}
+                    >
+                      승인
+                    </I.Button>
+                    <I.Button onClick={() => handleStatusChange("HOLD")}>
+                      보류
+                    </I.Button>
+                    <I.Button onClick={() => handleStatusChange("REJECT")}>
+                      거절
+                    </I.Button>
+                  </>
+                )}
+              </>
+            ) : (
+              <>
+                {role == "CLIENT" ? (
+                  <Link to={`/mypage`}>
+                    <I.Button className="close">닫기</I.Button>
+                  </Link>
+                ) : (
+                  <Link to={`/reservation/counselor`}>
+                    <I.Button className="close">닫기</I.Button>
+                  </Link>
+                )}
+              </>
+            )}
+          </I.ButtonWrapper>
         </I.Wrapper>
       </I.Base>
     </>

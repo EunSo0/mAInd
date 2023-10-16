@@ -20,12 +20,27 @@ export const detailState = atom({
   default: false,
 });
 
-export const reservationState = atom({
-  key: "isReservation",
-  default: false,
+export const nameValue = atom({
+  key: "name",
+  default: "",
+});
+
+export const roleState = atom({
+  key: "isClient",
+  default: "",
+});
+
+export const surveyState = atom({
+  key: "isSubmitSurvey",
+  default: "",
 });
 
 export const matchingState = atom({
   key: "isMatching",
+  default: "",
+});
+
+export const editSurveyState = atom({
+  key: "isEdit",
   default: false,
 });

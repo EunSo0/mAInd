@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import * as H from "../styles/components/Header.styles";
 import { Link } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { loginState, loginModalState, logoutModalState } from "../recoil/atom";
+import {
+  loginState,
+  loginModalState,
+  logoutModalState,
+  roleState,
+  surveyState,
+  nameValue,
+} from "../recoil/atom";
 import LoginModal from "../components/login/LoginModal";
 import LogoutModal from "./LogoutModal";
 import jwt_decode from "jwt-decode";
-
-const MenuList = [
-  { name: "상담하기", page: "/counsel" },
-  { name: "상담예약", page: "/reservation/client" },
-  { name: "마이페이지", page: "/mypage" },
-];
 
 export default function Header() {
   const [isLogin, setIsLogin] = useRecoilState(loginState);
@@ -19,8 +20,9 @@ export default function Header() {
     useRecoilState(loginModalState);
   const [isLogoutModalOpen, setIsLogoutModalOpen] =
     useRecoilState(logoutModalState);
-  const [name, setName] = useState("");
-  const [role, setRole] = useState("");
+  const [name, setName] = useRecoilState(nameValue);
+  const [role, setRole] = useRecoilState(roleState);
+  const [, seIsSubmitSurvey] = useRecoilState(surveyState);
 
   const clickLoginBtn = () => {
     setIsLoginModalOpen((prev) => !prev);
@@ -36,11 +38,13 @@ export default function Header() {
         console.log(jwt_decode(localStorage.getItem("token")));
         setName(jwt_decode(localStorage.getItem("token")).name);
         setRole(jwt_decode(localStorage.getItem("token")).role);
+        seIsSubmitSurvey(jwt_decode(localStorage.getItem("token")).status);
       } else {
         setIsLogin(false);
       }
     } catch (error) {
       console.log("error: " + JSON.stringify(localStorage));
+      console.log(error);
     }
   }, [isLogin]);
 
@@ -57,15 +61,25 @@ export default function Header() {
           {isLogin ? (
             <H.LinkWrapper>
               <H.NavLinks>
-                {MenuList.map((el) => (
-                  <H.NavLink key={el.page}>
-                    <Link to={el.page}>{el.name}</Link>
-                  </H.NavLink>
-                ))}
+                <H.NavLink>
+                  <Link to="/counsel">상담하기</Link>
+                </H.NavLink>
+                <H.NavLink>
+                  {role == "CLIENT" ? (
+                    <Link to="/reservation/client">상담예약</Link>
+                  ) : (
+                    <Link to="/reservation/counselor">상담예약</Link>
+                  )}
+                </H.NavLink>
+                <H.NavLink>
+                  <Link to="/mypage">마이페이지</Link>
+                </H.NavLink>
               </H.NavLinks>
               <H.Name>{name}님</H.Name>
               {role == "CLIENT" ? (
-                <H.RoleBtn onClick={clickLogoutBtn}>내담자</H.RoleBtn>
+                <H.RoleBtn onClick={clickLogoutBtn} className="client">
+                  내담자
+                </H.RoleBtn>
               ) : (
                 <H.RoleBtn onClick={clickLogoutBtn}>상담자</H.RoleBtn>
               )}

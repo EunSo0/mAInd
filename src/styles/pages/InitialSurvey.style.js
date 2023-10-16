@@ -215,4 +215,10 @@ export const Button = styled.button`
     background: #36f;
     color: #fff;
   }
+
+  &.close {
+    background: #666;
+    color: #fff;
+    border: none;
+  }
 `;

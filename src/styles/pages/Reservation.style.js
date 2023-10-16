@@ -2,11 +2,12 @@ import styled from "@emotion/styled";
 
 export const Wrapper = styled.div`
   width: 100%;
-  height: calc(100vh - 148px);
   background-color: #eff1ff;
   display: flex;
   flex-direction: column;
   text-align: center;
+  padding-top: 50px;
+  padding-bottom: 150px;
 `;
 export const Title = styled.div`
   color: #000;
@@ -45,6 +46,7 @@ export const WriteBtn = styled.button`
   font-weight: 500;
   line-height: 24px;
   margin: 0 auto;
-  margin-top: 50px;
+  margin-top: 80px;
   cursor: pointer;
+  margin-bottom: 40px;
 `;

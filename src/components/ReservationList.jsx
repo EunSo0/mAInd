@@ -20,20 +20,24 @@ export default function ReservationList() {
   return (
     <T.ChartWrapper>
       <T.Chart>
-        <T.ChartTr>
-          <T.ChartTh>일자</T.ChartTh>
-          <T.ChartTh>단계</T.ChartTh>
-          <T.ChartTh>진행</T.ChartTh>
-          <T.ChartTh>상세 내용</T.ChartTh>
-        </T.ChartTr>
-        {ReservationListData.map((el, index) => (
-          <T.ChartTr key={index}>
-            <T.ChartTd>{el.date}</T.ChartTd>
-            <T.ChartTd>{el.step}</T.ChartTd>
-            <T.ChartTd>{el.progress}</T.ChartTd>
-            <T.ChartTd>{el.contents}</T.ChartTd>
+        <thead>
+          <T.ChartTr>
+            <T.ChartTh>일자</T.ChartTh>
+            <T.ChartTh>단계</T.ChartTh>
+            <T.ChartTh>진행</T.ChartTh>
+            <T.ChartTh>상세 내용</T.ChartTh>
           </T.ChartTr>
-        ))}
+        </thead>
+        <tbody>
+          {ReservationListData.map((el, index) => (
+            <T.ChartTr key={index}>
+              <T.ChartTd>{el.date}</T.ChartTd>
+              <T.ChartTd>{el.step}</T.ChartTd>
+              <T.ChartTd>{el.progress}</T.ChartTd>
+              <T.ChartTd>{el.contents}</T.ChartTd>
+            </T.ChartTr>
+          ))}
+        </tbody>
       </T.Chart>
     </T.ChartWrapper>
   );

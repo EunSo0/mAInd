@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import * as M from "../styles/components/LoginModal";
+import * as M from "../styles/components/LoginModal.style";
 import { AiOutlineClose } from "react-icons/ai";
 
 // eslint-disable-next-line react/prop-types
