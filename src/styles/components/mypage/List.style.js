@@ -23,3 +23,9 @@ export const Title = styled.div`
   padding: 2px;
   margin-right: 10px;
 `;
+export const Undefined = styled.div`
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+  font-size: 18px;
+`;

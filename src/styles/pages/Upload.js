@@ -24,7 +24,6 @@ export const ContentWrapper = styled.div`
   align-items: baseline;
   width: 1200px;
   padding: 64px 380px 48px 380px;
-  gap: 64px;
   border-radius: 16px;
   border: 1px solid #868686;
   background: #f4f4f4;
@@ -48,6 +47,13 @@ export const sessionContent = styled.input`
 `;
 export const selectBtn = styled.input`
   line-height: 2.5rem;
+`;
+export const ErrorText = styled.span`
+  display: block;
+  font-size: 14px;
+  color: red;
+  font-weight: 500;
+  margin-bottom: 40px;
 `;
 export const UploadBtn = styled.button`
   display: flex;

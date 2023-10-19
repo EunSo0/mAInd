@@ -3,6 +3,7 @@ import Img from "../../images/Ing.png";
 
 export const Wrapper = styled.div`
   width: 100%;
+  min-height: 800px;
   overflow-x: hidden;
   background-color: #eff1ff;
   display: flex;

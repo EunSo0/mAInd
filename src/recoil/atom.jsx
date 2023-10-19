@@ -44,3 +44,8 @@ export const editSurveyState = atom({
   key: "isEdit",
   default: false,
 });
+
+export const resultData = atom({
+  key: "uploadResult",
+  default: null,
+});

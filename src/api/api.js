@@ -3,10 +3,11 @@ import { DateFormatTime } from "./../utils/DateFormat";
 
 const token = localStorage.getItem("token");
 const BASE_URL = "https://maind.site";
+const BASE_URL_VIDEO = "http://maind-meeting.shop:5001";
 
 export const getUserInfo = async () => {
   try {
-    const response = await axios.get("/mypage/userInfo", {
+    const response = await axios.get(`${BASE_URL}/mypage/userInfo`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -20,7 +21,7 @@ export const getUserInfo = async () => {
 
 export const getUserStatus = async () => {
   try {
-    const response = await axios.get("/mypage/status", {
+    const response = await axios.get(`${BASE_URL}/mypage/status`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -34,7 +35,7 @@ export const getUserStatus = async () => {
 
 export const getReservationList = async () => {
   try {
-    const response = await axios.get("/counseling/apply/list", {
+    const response = await axios.get(`${BASE_URL}/counseling/apply/list`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -48,12 +49,15 @@ export const getReservationList = async () => {
 
 export const getInitialSurvey = async (survey_id) => {
   try {
-    const response = await axios.get(`/mypage/surveys/${survey_id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await axios.get(
+      `${BASE_URL}/mypage/surveys/${survey_id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     console.log(error);
@@ -138,7 +142,7 @@ export const editInitialSurveyStatus = async (data) => {
 
 export const getCounselList = async () => {
   try {
-    const response = await axios.get("/counseling/list", {
+    const response = await axios.get(`${BASE_URL}/counseling/list`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -151,13 +155,22 @@ export const getCounselList = async () => {
   }
 };
 
-export const submitVideo = async (data) => {
+export const submitVideoData = async (data) => {
   try {
     const response = await axios.post(`${BASE_URL}/counseling/upload`, data, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const submitVideo = async (data) => {
+  try {
+    const response = await axios.post(`${BASE_URL_VIDEO}/file_upload`, data);
     return response.data;
   } catch (error) {
     console.log(error);

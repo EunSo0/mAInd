@@ -8,4 +8,10 @@ module.exports = function (app) {
       changeOrigin: true,
     })
   );
+  app.use(
+    createProxyMiddleware("/api2", {
+      target: "http://maind-meeting.shop:5001",
+      changeOrigin: true,
+    })
+  );
 };

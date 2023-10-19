@@ -1,6 +1,15 @@
 import styled from "@emotion/styled";
 import { Doughnut } from "react-chartjs-2";
 
+export const ContentWrapper = styled.div`
+  width: 100%;
+  overflow-x: hidden;
+  background-color: #eff1ff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
 export const Container = styled.div`
   width: 70%;
   margin: 20px auto;
@@ -20,6 +29,7 @@ export const Table = styled.table`
 
   th,
   td {
+    background-color: #fff;
     padding: 10px;
     border: 1px solid #ccc;
   }
@@ -30,32 +40,51 @@ export const Table = styled.table`
   }
 `;
 
-export const CounselingEntry = styled.div`
-  margin: 40px 0;
+export const CounselingEntry = styled.div``;
+
+export const QuestionWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: #f2f2f2;
+  padding: 20px 10px;
+  border: 1px solid #ccc;
 `;
 
-export const Question = styled.div`
-  margin-top: 0;
-  margin-bottom: 15px;
+export const Title = styled.div`
+  width: 150px;
   font-weight: bold;
-  color: #333;
+  color: #000;
   font-size: 24px;
+  margin: 0 30px;
+`;
+
+export const Answer = styled.div`
+  width: calc(100% - 150px);
+  font-size: 18px;
+`;
+
+export const AnswerWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: #fff;
+  padding: 20px 10px;
+  border: 1px solid #ccc;
+`;
+
+export const EmotionWrapper = styled.div`
+  background-color: #fff;
+  display: flex;
+  padding: 20px 10px;
+  border: 1px solid #ccc;
 `;
 
 export const EmotionLabel = styled.div`
   text-align: center;
-  font-weight: bold;
   color: #333;
   font-size: 24px;
-`;
-
-export const Answer = styled.p`
-  margin-bottom: 30px;
-  font-size: 18px;
-`;
-
-export const EmotionWrapper = styled.div`
-  display: flex;
+  font-weight: 500;
 `;
 
 export const Emotion = styled.h3`
@@ -67,6 +96,7 @@ export const TextEmotionCircle = styled.div`
   width: 200px;
   height: 200px;
   margin: 0 auto;
+  margin-top: 25px;
 
   ${({ value }) => {
     if (value === "행복") {
@@ -100,18 +130,27 @@ export const TextEmotion = styled.h1`
   padding-top: 70px;
 `;
 
-export const Total = styled.h1`
-  font-weight: bold;
-  font-size: 30px;
-  text-align: center;
-`;
-
 export const FacialExpressionChart = styled(Doughnut)`
   width: 200px;
   margin-top: 25px;
 `;
 
+export const TotalWrapper = styled.div`
+  background-color: #f2f2f2;
+  border: 1px solid #ccc;
+`;
+
+export const Total = styled.h1`
+  margin: 20px;
+  font-size: 24px;
+  text-align: center;
+  padding: 20px;
+  font-weight: 500;
+`;
+
 export const TotalChartWrapper = styled.div`
+  display: flex;
+  justify-content: center;
   width: 400px;
   height: 400px;
   margin: 0 auto;
@@ -122,20 +161,68 @@ export const TotalChartWrapper = styled.div`
 export const TotalChart = styled(Doughnut)`
   width: 200px;
 `;
+
 export const InputArea = styled.div`
+  width: 70%;
   margin: 0 auto;
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  margin: 50px;
+  background-color: #f2f2f2;
+  border: 1px solid #ccc;
+`;
+export const InputText = styled.div`
+  padding: 10px;
+  color: #000;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
 `;
 
 export const Input = styled.textarea`
-  width: 80%;
-  height: 400px;
+  width: 100%;
+  height: 200px;
   margin: 0 auto;
-  font-size: 20px;
-  border: 1px solid;
+  font-size: 18px;
+  border: 1px solid #ccc;
   border-radius: 3px;
   text-align: left;
   padding: 15px;
+
+  &:focus {
+    outline: none;
+  }
+`;
+
+export const ButtonWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
+  margin-bottom: 200px;
+`;
+
+export const Button = styled.button`
+  display: flex;
+  width: 288px;
+  height: 64px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 16px;
+  border: 1px solid #36f;
+  background: #36f;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 24px;
+  margin: 10px;
+  cursor: pointer;
+
+  &.submit {
+    background: #666;
+    color: #fff;
+    border: none;
+  }
 `;

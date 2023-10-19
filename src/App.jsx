@@ -12,6 +12,7 @@ import ReservationCounselor from "./pages/counselor/Reservation";
 import InitialSurveyCounselor from "./pages/counselor/InitialSurvey";
 import GoogleLoginRedirect from "./pages/GoogleLoginRedirect";
 import Upload from "./pages/Upload";
+import OnlineMeeting from "./components/OnlineMeeting/OnlineMeeting";
 
 function App() {
   return (
@@ -19,7 +20,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/counsel" element={<Counsel />} />
-        <Route path="/counsel/upload" element={<Upload />} />
+        <Route path="/counsel/upload/:survey_id" element={<Upload />} />
         <Route path="/reservation/client" element={<ReservationClient />} />
         <Route path="/initialSurvey/client" element={<InitialSurveyClient />} />
         <Route
@@ -41,6 +42,7 @@ function App() {
           path="/oauth2/redirect/:token"
           element={<GoogleLoginRedirect />}
         />
+        <Route path="/OnlineMeeting" element={<OnlineMeeting />} />
       </Routes>
     </>
   );

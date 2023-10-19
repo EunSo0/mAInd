@@ -1,70 +1,60 @@
 /* eslint-disable react/prop-types */
 import React from "react";
-//import { useQuery } from "react-query";
-//import axios from "axios";
+
 import * as L from "../../styles/components/mypage/List.style";
 import * as T from "../../styles/components/mypage/Table.style";
-
-const CounselList = [
-  { num: 1, name: "김내담", birth: "00.04.10", symptom: "우울", count: 1 },
-  {
-    num: 2,
-    name: "차덕성",
-    birth: "98.02.21",
-    symptom: "수면장애",
-    count: 3,
-  },
-];
+import { getCounselList } from "../../api/api";
+import { useQuery } from "react-query";
+import { DateFormat } from "./../../utils/DateFormat";
 
 export default function List({ isDetail, setIsDetail }) {
-  // const profileData = useQuery(
-  //   ["profileData"],
-  //   () => axios.get("/profiles/1"),
-  //   {
-  //     onSuccess: (data) => {
-  //       console.log("success", data);
-  //     },
-  //   }
-  // );
-  // console.log(profileData);
-
   const onClickDetail = () => {
     setIsDetail(!isDetail);
   };
+
+  const { data, isLoading, isError } = useQuery("counselList", getCounselList);
+
+  if (isLoading) {
+    return <p>Loading user data...</p>;
+  } else if (isError) {
+    return <p>Error fetching user data</p>;
+  }
 
   return (
     <L.Wrapper>
       <L.ListWrapper>
         <L.Title>상담목록</L.Title>
       </L.ListWrapper>
-      <T.ChartWrapper>
-        <T.Chart>
-          <thead>
-            <T.ChartTr>
-              <T.ChartTh>번호</T.ChartTh>
-              <T.ChartTh>내담자명</T.ChartTh>
-              <T.ChartTh>생년월일</T.ChartTh>
-              <T.ChartTh>증상</T.ChartTh>
-              <T.ChartTh>상담횟수</T.ChartTh>
-            </T.ChartTr>
-          </thead>
-          <tbody>
-            {CounselList.map((el, index) => {
-              return (
-                <T.ChartTr key={index}>
-                  <T.ChartTd>{index + 1}</T.ChartTd>
-                  <T.ChartTd onClick={onClickDetail} className="name">
-                    {el.name}
-                  </T.ChartTd>
-                  <T.ChartTd>{el.birth}</T.ChartTd>
-                  <T.ChartTd>{el.symptom}</T.ChartTd>
-                  <T.ChartTd>{el.count}회</T.ChartTd>
-                </T.ChartTr>
-              );
-            })}
-          </tbody>
-        </T.Chart>
-      </T.ChartWrapper>
+      {data.length == 0 ? (
+        <L.Undefined>상담 목록이 없습니다.</L.Undefined>
+      ) : (
+        <T.ChartWrapper>
+          <T.Chart>
+            <thead>
+              <T.ChartTr>
+                <T.ChartTh>번호</T.ChartTh>
+                <T.ChartTh>내담자명</T.ChartTh>
+                <T.ChartTh>생년월일</T.ChartTh>
+                <T.ChartTh>증상</T.ChartTh>
+              </T.ChartTr>
+            </thead>
+            <tbody>
+              {data.map((el, index) => {
+                return (
+                  <T.ChartTr key={index}>
+                    <T.ChartTd>{index + 1}</T.ChartTd>
+                    <T.ChartTd onClick={onClickDetail} className="name">
+                      {el.name}
+                    </T.ChartTd>
+                    <T.ChartTd>{DateFormat(el.birth)}</T.ChartTd>
+                    <T.ChartTd key={index}>{el.symptoms.join(", ")}</T.ChartTd>
+                  </T.ChartTr>
+                );
+              })}
+            </tbody>
+          </T.Chart>
+        </T.ChartWrapper>
+      )}
     </L.Wrapper>
   );
 }

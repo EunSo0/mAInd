@@ -47,7 +47,7 @@ export default function Reservation() {
   console.log(data);
   return (
     <Base>
-      <Title>신규 상담 신청 내역이 1건 있습니다.</Title>
+      <Title>신규 상담 신청 내역이 {data.length}건 있습니다.</Title>
       <T.ChartWrapper>
         <T.Chart>
           <thead>
@@ -71,9 +71,9 @@ export default function Reservation() {
                   <T.ChartTd>{DateFormat(el.birth)}</T.ChartTd>
                   <T.ChartTd>{el.symptoms.join(", ")}</T.ChartTd>
                   {el.applyStatus === "ACCEPT" ? (
-                    <T.ChartTd>{DateFormat(el.statusDate)}</T.ChartTd>
+                    <T.ChartTd>승인 {DateFormat(el.statusDate)}</T.ChartTd>
                   ) : el.applyStatus === "REJECT" ? (
-                    <T.ChartTd>거절</T.ChartTd>
+                    <T.ChartTd>거절 {DateFormat(el.statusDate)}</T.ChartTd>
                   ) : el.applyStatus === "HOLD" ? (
                     <T.ChartTd>보류</T.ChartTd>
                   ) : (

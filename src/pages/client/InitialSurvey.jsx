@@ -4,7 +4,7 @@ import { useRecoilState } from "recoil";
 import { surveyState } from "../../recoil/atom";
 import { useForm } from "react-hook-form";
 import * as I from "../../styles/pages/InitialSurvey.style";
-import InputDatePicker from "../../components/DatePicker";
+import { InputBirthDatePicker } from "../../components/DatePicker";
 import { useMutation } from "react-query";
 import { submitInitialSurvey } from "./../../api/api";
 
@@ -102,7 +102,7 @@ export default function InitialSurvey() {
               <I.ErrorText>{errors?.phone?.message}</I.ErrorText>
               <I.InputWrapper>
                 <I.Label>생년월일</I.Label>
-                <InputDatePicker control={control} />
+                <InputBirthDatePicker control={control} />
               </I.InputWrapper>
               <I.ErrorText>{errors?.birth?.message}</I.ErrorText>
               <I.InputWrapper>

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 import React, { Component } from "react";
 import { OpenVidu } from "openvidu-browser";
@@ -13,9 +14,8 @@ import HeadsetOffIcon from "@mui/icons-material/HeadsetOff";
 import CallEndIcon from "@mui/icons-material/CallEnd";
 import ChatIcon from "@mui/icons-material/Chat";
 
-// 로컬 미디어 서버 주소
-const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === "production" ? "" : "https://demos.openvidu.io/";
+const OPENVIDU_SERVER_URL = "https://maind.site:4443/";
+const OPENVIDU_SERVER_SECRET = "maind0000";
 
 const Container = styled.div`
   height: 100vh;
@@ -440,26 +440,63 @@ class OnlineMeeting extends Component {
     return await this.createToken(sessionId);
   }
 
-  async createSession(sessionId) {
-    const response = await axios.post(
-      APPLICATION_SERVER_URL + "api/sessions",
-      { customSessionId: sessionId },
-      {
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-    return response.data; // The sessionId
+  createSession(sessionId) {
+    return new Promise((resolve, reject) => {
+      axios
+        .post(
+          `${OPENVIDU_SERVER_URL}/openvidu/api/sessions`,
+          JSON.stringify({
+            customSessionId: sessionId,
+          }),
+          {
+            auth: {
+              username: "OPENVIDUAPP",
+              password: OPENVIDU_SERVER_SECRET,
+            },
+          }
+        )
+        .then((response) => response.data)
+        .then((data) => resolve(data.id))
+        .catch((error) => {
+          console.log(error);
+          // if (error.response.status === 409) {
+          //   resolve(sessionId);
+          // } else {
+          //   console.warn(
+          //     `OpenVidu Server 연결이 없습니다. ${OPENVIDU_SERVER_URL}의 인증서 오류일 수 있습니다.`
+          //   );
+          //   if (
+          //     window.confirm(
+          //       `OpenVidu Server와의 연결이 없습니다. ${OPENVIDU_SERVER_URL}에서 인증서 오류가 표시되지 않으면 OpenVidu Server가 "${OPENVIDU_SERVER_URL}"에서 실행 중인지 확인하세요.`
+          //     )
+          //   ) {
+          //     window.location.assign(
+          //       `${OPENVIDU_SERVER_URL}/accept-certificate`
+          //     );
+          //   }
+          //   reject(error.response);
+          // }
+        });
+    });
   }
 
-  async createToken(sessionId) {
-    const response = await axios.post(
-      APPLICATION_SERVER_URL + "api/sessions/" + sessionId + "/connections",
-      {},
-      {
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-    return response.data; // The token
+  createToken(sessionId) {
+    return new Promise((resolve, reject) => {
+      axios
+        .post(
+          `${OPENVIDU_SERVER_URL}/openvidu/api/sessions/${sessionId}/connection`,
+          {},
+          {
+            auth: {
+              username: "OPENVIDUAPP",
+              password: OPENVIDU_SERVER_SECRET,
+            },
+          }
+        )
+        .then((response) => response.data)
+        .then((data) => resolve(data.token))
+        .catch((error) => reject(error.response));
+    });
   }
 }
 

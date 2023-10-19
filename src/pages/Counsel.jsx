@@ -53,7 +53,7 @@ export default function Counsel() {
                         </T.ChartTd>
                         <T.ChartTd>
                           {!el.upload ? (
-                            <Link to="/counsel/upload">
+                            <Link to={`/counsel/upload/${el.survey_id}`}>
                               <T.ResultBtn className="upload">
                                 영상업로드하기
                               </T.ResultBtn>

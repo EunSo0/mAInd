@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import * as DL from "../../styles/components/mypage/DetailList.style";
 import * as T from "../../styles/components/mypage/Table.style";
 
@@ -57,7 +58,13 @@ export default function DetailList() {
                 <T.ChartTd>{el.date}</T.ChartTd>
                 <T.ChartTd>{el.symptom}</T.ChartTd>
                 <T.ChartTd>
-                  {el.counsel ? <T.ResultBtn>상담일지</T.ResultBtn> : "제공전"}
+                  <Link to="/result">
+                    {el.counsel ? (
+                      <T.ResultBtn>상담일지</T.ResultBtn>
+                    ) : (
+                      "제공전"
+                    )}
+                  </Link>
                 </T.ChartTd>
               </T.ChartTr>
             ))}
