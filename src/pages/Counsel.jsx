@@ -43,27 +43,35 @@ export default function Counsel() {
                     </T.ChartTr>
                   </thead>
                   <tbody>
-                    {data.map((el, index) => (
-                      <T.ChartTr key={index}>
-                        <T.ChartTd>{index + 1}</T.ChartTd>
-                        <T.ChartTd>{el.name}</T.ChartTd>
-                        <T.ChartTd>{DateFormat(el.birth)}</T.ChartTd>
-                        <T.ChartTd key={index}>
-                          {el.symptoms.join(", ")}
-                        </T.ChartTd>
-                        <T.ChartTd>
-                          {!el.upload ? (
-                            <Link to={`/counsel/upload/${el.survey_id}`}>
-                              <T.ResultBtn className="upload">
-                                영상업로드하기
-                              </T.ResultBtn>
-                            </Link>
-                          ) : (
-                            "업로드완료"
-                          )}
-                        </T.ChartTd>
-                      </T.ChartTr>
-                    ))}
+                    {data ? (
+                      data.length > 0 ? (
+                        data.map((el, index) => (
+                          <T.ChartTr key={index}>
+                            <T.ChartTd>{index + 1}</T.ChartTd>
+                            <T.ChartTd>{el.name}</T.ChartTd>
+                            <T.ChartTd>{DateFormat(el.birth)}</T.ChartTd>
+                            <T.ChartTd key={index}>
+                              {el.symptoms ? el.symptoms.join(", ") : ""}
+                            </T.ChartTd>
+                            <T.ChartTd>
+                              {el.upload === false ? (
+                                <Link to={`/counsel/upload/${el.survey_id}`}>
+                                  <T.ResultBtn className="upload">
+                                    영상업로드하기
+                                  </T.ResultBtn>
+                                </Link>
+                              ) : el.upload === true ? (
+                                "업로드완료"
+                              ) : null}
+                            </T.ChartTd>
+                          </T.ChartTr>
+                        ))
+                      ) : (
+                        <p>상담 목록이 없습니다.</p>
+                      )
+                    ) : (
+                      <p>Loading user data...</p>
+                    )}
                   </tbody>
                 </T.Chart>
               </T.ChartWrapper>

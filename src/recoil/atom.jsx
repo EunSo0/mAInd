@@ -49,3 +49,8 @@ export const resultData = atom({
   key: "uploadResult",
   default: null,
 });
+
+export const detailId = atom({
+  key: "detailSurveyId",
+  default: "",
+});

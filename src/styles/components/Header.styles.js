@@ -13,6 +13,7 @@ export const Wrapper = styled.header`
   justify-content: center;
   align-items: center;
   border-bottom: solid 1px #e2e2e2;
+  z-index: 999;
 `;
 
 export const Inner = styled.div`

@@ -35,7 +35,7 @@ function App() {
           path="/initialSurvey/:survey_id"
           element={<InitialSurveyCounselor />}
         />
-        <Route path="/result" element={<Result />} />
+        <Route path="/result/:counseling_id" element={<Result />} />
         <Route path="/mypage" element={<MyPage />} />
         <Route path="*" element={<Navigate replace to="/" />} />
         <Route

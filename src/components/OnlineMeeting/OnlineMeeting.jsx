@@ -458,24 +458,21 @@ class OnlineMeeting extends Component {
         .then((response) => response.data)
         .then((data) => resolve(data.id))
         .catch((error) => {
-          console.log(error);
-          // if (error.response.status === 409) {
-          //   resolve(sessionId);
-          // } else {
-          //   console.warn(
-          //     `OpenVidu Server 연결이 없습니다. ${OPENVIDU_SERVER_URL}의 인증서 오류일 수 있습니다.`
-          //   );
-          //   if (
-          //     window.confirm(
-          //       `OpenVidu Server와의 연결이 없습니다. ${OPENVIDU_SERVER_URL}에서 인증서 오류가 표시되지 않으면 OpenVidu Server가 "${OPENVIDU_SERVER_URL}"에서 실행 중인지 확인하세요.`
-          //     )
-          //   ) {
-          //     window.location.assign(
-          //       `${OPENVIDU_SERVER_URL}/accept-certificate`
-          //     );
-          //   }
-          //   reject(error.response);
-          // }
+          if (error.response.status === 409) {
+            resolve(sessionId);
+          } else {
+            console.warn(
+              `No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_SERVER_URL}`
+            );
+            if (
+              window.confirm(
+                `No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_SERVER_URL}\n\nClick OK to navigate and accept it. If no certificate warning is shown, then check that your OpenVidu Server is up and running at "${OPENVIDU_SERVER_URL}"`
+              )
+            ) {
+              location.assign(`${OPENVIDU_SERVER_URL}/accept-certificate`);
+            }
+            reject(error.response);
+          }
         });
     });
   }

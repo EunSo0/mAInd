@@ -6,7 +6,11 @@ import {
   InputCounselTimePicker,
 } from "../components/DatePicker";
 import { useNavigate, useParams } from "react-router-dom";
-import { submitVideo } from "../api/api";
+import {
+  submitVideo,
+  submitVideoData,
+  counselingVideoResult,
+} from "../api/api";
 import { useMutation } from "react-query";
 import { useForm } from "react-hook-form";
 import { resultData } from "../recoil/atom";
@@ -16,7 +20,15 @@ export default function Upload() {
   const navigate = useNavigate();
   const { survey_id } = useParams();
   const [file, setFile] = useState(null);
-  const { mutate, status } = useMutation("submitSurvey", submitVideo);
+  const { mutate: mutateSubmitVideo, status: statusSubmitVideo } = useMutation(
+    "submitVideo",
+    submitVideo
+  );
+  const { mutate: mutateSubmitVideoData, status: statusSubmitVideoData } =
+    useMutation("submitVideoData", submitVideoData);
+  const { mutate: mutateSubmitResult, status: statusSubmitResult } =
+    useMutation("submitResult", counselingVideoResult);
+
   const {
     register,
     formState: { errors },
@@ -30,31 +42,58 @@ export default function Upload() {
     setFile(selectedFile);
     console.log("Selected file:", selectedFile);
   };
+
   const onSubmitVideo = (data) => {
-    // const requestData = {
-    //   survey_id: Number(survey_id), // survey_id는 문자열일 수 있으므로 숫자로 변환
-    //   date: data.date,
-    //   startHour: Number(data.time[0].split(":")[0]),
-    //   startMin: Number(data.time[0].split(":")[1]),
-    //   endHour: Number(data.time[1].split(":")[0]),
-    //   endMin: Number(data.time[1].split(":")[1]),
-    //   countNum: Number(data.countNum), // countNum도 숫자로 변환
-    // };
+    const videoData = {
+      surveyId: Number(survey_id), // survey_id는 문자열일 수 있으므로 숫자로 변환
+      date: data.date,
+      startHour: Number(data.time[0].split(":")[0]),
+      startMin: Number(data.time[0].split(":")[1]),
+      endHour: Number(data.time[1].split(":")[0]),
+      endMin: Number(data.time[1].split(":")[1]),
+      countNum: Number(data.countNum), // countNum도 숫자로 변환
+    };
 
     const requestBody = {
       countNum: Number(data.countNum),
       survey_id: Number(survey_id),
     };
-    let formData = new FormData();
-    formData.append("file", file);
-    formData.append("requestBody", JSON.stringify(requestBody));
+    let videoFormData = new FormData();
+    videoFormData.append("file", file);
+    videoFormData.append("requestBody", JSON.stringify(requestBody));
 
-    mutate(formData, {
+    const pathData = {
+      surveyId: Number(survey_id),
+      countNum: Number(data.countNum),
+    };
+
+    console.log(pathData);
+
+    mutateSubmitVideoData(videoData, {
       onSuccess: (response) => {
         console.log(response);
-        setUploadResult(response);
-        console.log(uploadResult);
-        navigate("/counsel");
+
+        mutateSubmitVideo(videoFormData, {
+          onSuccess: (videoResponse) => {
+            console.log(videoResponse);
+            setUploadResult(videoResponse);
+
+            mutateSubmitResult(videoResponse, {
+              onSuccess: (resultResponse) => {
+                console.log(resultResponse);
+                navigate("/counsel");
+              },
+              onError: (error) => {
+                console.error(error);
+                alert(JSON.stringify(error.response.data));
+              },
+            });
+          },
+          onError: (error) => {
+            console.error(error);
+            alert(JSON.stringify(error.response.data));
+          },
+        });
       },
       onError: (error) => {
         console.error(error);
@@ -65,11 +104,16 @@ export default function Upload() {
     console.log(uploadResult);
   };
 
-  if (status === "loading") {
-    return <p>Loading user data...</p>;
+  if (statusSubmitVideo === "loading") {
+    console.log("영상 분석중..");
+  }
+  if (statusSubmitVideoData === "loading") {
+    console.log("데이터보내는중..");
+  }
+  if (statusSubmitResult === "loading") {
+    console.log("결과보내는중..");
   }
 
-  console.log(uploadResult);
   return (
     <U.Wrapper>
       <U.Title>상담영상업로드</U.Title>

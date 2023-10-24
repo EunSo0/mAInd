@@ -17,12 +17,12 @@ const Base = styled.div`
 
 export default function MyPage() {
   const [isDetail, setIsDetail] = useRecoilState(detailState);
+  console.log(isDetail);
 
   return (
     <>
       <Base>
         <Profile></Profile>
-
         {isDetail ? (
           <Detail></Detail>
         ) : (
