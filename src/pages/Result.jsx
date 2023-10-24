@@ -10,10 +10,13 @@ import {
 import { useQuery, useMutation } from "react-query";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { DateFormat } from "../utils/DateFormat";
+import { roleState } from "../recoil/atom";
+import { useRecoilState } from "recoil";
 
 function Result() {
   const { counseling_id } = useParams();
   const navigate = useNavigate();
+  const [role] = useRecoilState(roleState);
 
   const [counselingData, setCounselingData] = useState();
   const [facialEmotion1, setFacialEmotion1] = useState();
@@ -369,11 +372,19 @@ function Result() {
           </R.TotalChartWrapper>
         </R.TotalWrapper>
       </R.Container>
-      <R.InputArea>
-        <R.InputText onChange={onChange}>상담자 소견</R.InputText>
-        <R.Input />
-      </R.InputArea>
-      {result.resultOfferStatus === "ACCEPT" ? (
+      {role === "COUNSELOR" ? (
+        <R.InputArea>
+          <R.InputText>상담자 소견</R.InputText>
+          <R.Input defaultValue={result.opinion} onChange={onChange} />
+        </R.InputArea>
+      ) : (
+        <R.InputArea>
+          <R.InputText>상담자 소견</R.InputText>
+          <R.Opinion>{result.opinion}</R.Opinion>
+        </R.InputArea>
+      )}
+
+      {result.resultOfferStatus === "ACCEPT" || role == "CLIENT" ? (
         <R.ButtonWrapper>
           <Link to="/mypage">
             <R.Button>닫기</R.Button>

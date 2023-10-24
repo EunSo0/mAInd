@@ -60,9 +60,9 @@ export default function Counsel() {
                                     영상업로드하기
                                   </T.ResultBtn>
                                 </Link>
-                              ) : el.upload === true ? (
+                              ) : (
                                 "업로드완료"
-                              ) : null}
+                              )}
                             </T.ChartTd>
                           </T.ChartTr>
                         ))

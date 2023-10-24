@@ -194,6 +194,17 @@ export const Input = styled.textarea`
   }
 `;
 
+export const Opinion = styled.div`
+  width: 100%;
+  height: 200px;
+  margin: 0 auto;
+  font-size: 18px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  text-align: left;
+  padding: 15px;
+`;
+
 export const ButtonWrapper = styled.div`
   display: flex;
   flex-direction: row;

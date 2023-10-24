@@ -24,9 +24,9 @@ export default function MyPage() {
       <Base>
         <Profile></Profile>
         {isDetail ? (
-          <Detail></Detail>
+          <Detail setIsDetail={setIsDetail} />
         ) : (
-          <List setIsDetail={(isDetail, setIsDetail)}></List>
+          <List setIsDetail={setIsDetail} />
         )}
       </Base>
     </>

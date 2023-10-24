@@ -14,6 +14,13 @@ export const Wrapper = styled.div`
 export const ListWrapper = styled.div`
   display: flex;
   flex-direction: row;
+
+  .back {
+    font-size: 32px;
+    height: auto;
+    cursor: pointer;
+    margin-right: 10px;
+  }
 `;
 export const Title = styled.div`
   font-size: 24px;

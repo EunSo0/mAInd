@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from "react";
 import { Link } from "react-router-dom";
 import * as DL from "../../styles/components/mypage/DetailList.style";
@@ -7,8 +8,9 @@ import { useRecoilState } from "recoil";
 import { getClientDetail, getClientCounselingList } from "../../api/api";
 import { useQuery } from "react-query";
 import { DateFormat } from "../../utils/DateFormat";
+import { AiOutlineDoubleLeft } from "react-icons/ai";
 
-export default function DetailList() {
+export default function DetailList({ setIsDetail }) {
   const [surveyId] = useRecoilState(detailId);
   console.log(surveyId);
 
@@ -34,11 +36,16 @@ export default function DetailList() {
 
   console.log(detailList);
 
+  const onClickBack = () => {
+    setIsDetail(false);
+  };
+
   return (
     <DL.Wrapper>
       {detailProfile ? (
         <>
           <DL.ListWrapper>
+            <AiOutlineDoubleLeft className="back" onClick={onClickBack} />
             <DL.Title>
               내담자 목록 {">"} {detailProfile.name}
             </DL.Title>
