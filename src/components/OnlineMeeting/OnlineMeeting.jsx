@@ -276,15 +276,9 @@ class OnlineMeeting extends Component {
               this.userRef.current.children[i].style.borderColor = "#1773EA";
             }
           }
-          console.log(
-            "User " + event.connection.connectionId + " start speaking"
-          );
         });
 
         mySession.on("publisherStopSpeaking", (event) => {
-          console.log(
-            "User " + event.connection.connectionId + " stop speaking"
-          );
           for (let i = 0; i < this.userRef.current.children.length; i++) {
             if (
               JSON.parse(event.connection.data).clientData ===
@@ -363,7 +357,7 @@ class OnlineMeeting extends Component {
                 '"'
             )
           ) {
-            window.location.assign(OPENVIDU_SERVER_URL + "accept-certificate");
+            window.location.assign(OPENVIDU_SERVER_URL + "/accept-certificate");
           }
         });
     });

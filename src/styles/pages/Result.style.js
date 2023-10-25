@@ -136,7 +136,7 @@ export const FacialExpressionChart = styled(Doughnut)`
 `;
 
 export const TotalWrapper = styled.div`
-  background-color: #f2f2f2;
+  background-color: #fff;
   border: 1px solid #ccc;
 `;
 
@@ -203,6 +203,7 @@ export const Opinion = styled.div`
   border-radius: 3px;
   text-align: left;
   padding: 15px;
+  background-color: #fff;
 `;
 
 export const ButtonWrapper = styled.div`

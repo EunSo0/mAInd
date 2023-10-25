@@ -62,7 +62,7 @@ export default function Header() {
             <H.LinkWrapper>
               <H.NavLinks>
                 <H.NavLink>
-                  <Link to="/counsel">상담하기</Link>
+                  <Link to="/OnlineMeeting">상담하기</Link>
                 </H.NavLink>
                 <H.NavLink>
                   {role == "CLIENT" ? (
