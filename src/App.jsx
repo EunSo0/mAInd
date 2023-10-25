@@ -13,6 +13,7 @@ import InitialSurveyCounselor from "./pages/counselor/InitialSurvey";
 import GoogleLoginRedirect from "./pages/GoogleLoginRedirect";
 import Upload from "./pages/Upload";
 import OnlineMeeting from "./components/OnlineMeeting/OnlineMeeting";
+import WebCam from "./components/webRTC/Webcam";
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
           element={<GoogleLoginRedirect />}
         />
         <Route path="/OnlineMeeting" element={<OnlineMeeting />} />
+        <Route path="/WebCam" element={<WebCam />} />
       </Routes>
     </>
   );

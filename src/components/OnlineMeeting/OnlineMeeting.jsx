@@ -3,7 +3,7 @@
 import React, { Component } from "react";
 import { OpenVidu } from "openvidu-browser";
 import axios from "axios";
-import styled from "styled-components";
+import * as O from "./OnlineMeeting.style.js";
 import UserVideoComponent from "./UserVideoComponent";
 import VideocamOutlinedIcon from "@mui/icons-material/VideocamOutlined";
 import MicOutlinedIcon from "@mui/icons-material/MicOutlined";
@@ -14,130 +14,17 @@ import HeadsetOffIcon from "@mui/icons-material/HeadsetOff";
 import CallEndIcon from "@mui/icons-material/CallEnd";
 import ChatIcon from "@mui/icons-material/Chat";
 
-const OPENVIDU_SERVER_URL = "https://maind.site:4443/";
+const OPENVIDU_SERVER_URL = "https://maind.site:4443";
 const OPENVIDU_SERVER_SECRET = "maind0000";
-
-const Container = styled.div`
-  height: 100vh;
-  width: 100%;
-  background-color: #202124;
-`;
-
-const Header = styled.div`
-  height: 8vh;
-  display: flex;
-  align-items: center;
-  padding: 0 50px;
-  justify-content: center;
-`;
-
-const StudyTitle = styled.p`
-  color: white;
-  font-size: 20px;
-  font-weight: 600;
-`;
-
-const Middle = styled.div`
-  width: 100%;
-  display: flex;
-  overflow: hidden;
-`;
-
-const Left = styled.div`
-  flex: 3;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-`;
-
-const VideoContainer = styled.div`
-  margin-top: 30px;
-  height: 77vh;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-`;
-
-const StreamContainerWrapper = styled.div`
-  display: grid;
-  place-items: center;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 20px;
-  height: 100%;
-  padding: 10px;
-  @media screen and (max-width: 800px) {
-    background-color: red;
-  }
-`;
-
-const StreamContainer = styled.div`
-  width: 100%;
-  position: relative;
-  border-radius: 5px;
-  min-height: 34vh;
-  overflow: hidden;
-  box-sizing: border-box;
-`;
-
-const Bottom = styled.div`
-  height: 13vh;
-  display: flex;
-  justify-content: center;
-  position: relative;
-  align-items: center;
-`;
-
-const BottomBox = styled.div`
-  display: flex;
-  height: 100%;
-  width: 20%;
-  align-items: center;
-  justify-content: space-around;
-`;
-
-const Icon = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background-color: #333;
-  color: white;
-  cursor: pointer;
-  transition: 0.1s;
-  &:hover {
-    background-color: #3c4043;
-  }
-
-  ${(props) =>
-    props.primary &&
-    `
-      background-color: red;
-      color: white;
-      &:hover{
-          background-color: red;
-      }
-    `}
-`;
-
-const ChatIconBox = styled.div`
-  position: absolute;
-  color: white;
-  right: 60px;
-  top: 50%;
-  bottom: 50%;
-  cursor: pointer;
-`;
 
 class OnlineMeeting extends Component {
   render() {
     return (
-      <Container>
-        <Header>
-          <StudyTitle>mAInd</StudyTitle>
-        </Header>
-        <Middle>
+      <O.Container>
+        <O.Header>
+          <O.StudyTitle>mAInd</O.StudyTitle>
+        </O.Header>
+        <O.Middle>
           {this.state.session === undefined ? (
             <div
               style={{
@@ -169,33 +56,35 @@ class OnlineMeeting extends Component {
               </div>
             </div>
           ) : null}
-          <Left>
-            <VideoContainer>
+          <O.Left>
+            <O.VideoContainer>
               {this.state.session !== undefined ? (
-                <StreamContainerWrapper
+                <O.StreamContainerWrapper
                   primary={this.state.isChat}
                   ref={this.userRef}
                 >
                   {this.state.publisher !== undefined ? (
-                    <StreamContainer key={this.state.publisher.stream.streamId}>
+                    <O.StreamContainer
+                      key={this.state.publisher.stream.streamId}
+                    >
                       <UserVideoComponent
                         streamManager={this.state.publisher}
                       />
-                    </StreamContainer>
+                    </O.StreamContainer>
                   ) : null}
                   {this.state.subscribers.map((sub) => (
-                    <StreamContainer key={sub.stream.streamId}>
+                    <O.StreamContainer key={sub.stream.streamId}>
                       <UserVideoComponent streamManager={sub} />
-                    </StreamContainer>
+                    </O.StreamContainer>
                   ))}
-                </StreamContainerWrapper>
+                </O.StreamContainerWrapper>
               ) : null}
-            </VideoContainer>
-          </Left>
-        </Middle>
-        <Bottom>
-          <BottomBox>
-            <Icon
+            </O.VideoContainer>
+          </O.Left>
+        </O.Middle>
+        <O.Bottom>
+          <O.BottomBox>
+            <O.Icon
               primary={!this.state.isCamera}
               onClick={() => this.handleToggle("camera")}
             >
@@ -204,33 +93,33 @@ class OnlineMeeting extends Component {
               ) : (
                 <VideocamOffOutlinedIcon />
               )}
-            </Icon>
+            </O.Icon>
 
-            <Icon
+            <O.Icon
               primary={!this.state.isMike}
               onClick={() => this.handleToggle("mike")}
             >
               {this.state.isMike ? <MicOutlinedIcon /> : <MicOffIcon />}
-            </Icon>
+            </O.Icon>
 
-            <Icon
+            <O.Icon
               primary={!this.state.isSpeaker}
               onClick={() => this.handleToggle("speaker")}
             >
               {this.state.isSpeaker ? <HeadsetIcon /> : <HeadsetOffIcon />}
-            </Icon>
+            </O.Icon>
 
-            <Icon primary onClick={this.leaveSession}>
+            <O.Icon primary onClick={this.leaveSession}>
               <CallEndIcon />
-            </Icon>
-          </BottomBox>
-          <ChatIconBox
+            </O.Icon>
+          </O.BottomBox>
+          <O.ChatIconBox
             onClick={() => this.setState({ isChat: !this.state.isChat })}
           >
             <ChatIcon />
-          </ChatIconBox>
-        </Bottom>
-      </Container>
+          </O.ChatIconBox>
+        </O.Bottom>
+      </O.Container>
     );
   }
 
@@ -442,36 +331,39 @@ class OnlineMeeting extends Component {
 
   createSession(sessionId) {
     return new Promise((resolve, reject) => {
+      let data = JSON.stringify({ customSessionId: sessionId });
+
       axios
-        .post(
-          `${OPENVIDU_SERVER_URL}/openvidu/api/sessions`,
-          JSON.stringify({
-            customSessionId: sessionId,
-          }),
-          {
-            auth: {
-              username: "OPENVIDUAPP",
-              password: OPENVIDU_SERVER_SECRET,
-            },
-          }
-        )
-        .then((response) => response.data)
-        .then((data) => resolve(data.id))
-        .catch((error) => {
-          if (error.response.status === 409) {
+        .post(OPENVIDU_SERVER_URL + "/openvidu/api/sessions", data, {
+          headers: {
+            Authorization: `Basic ${btoa(
+              `OPENVIDUAPP:${OPENVIDU_SERVER_SECRET}`
+            )}`,
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          resolve(res.data.id);
+        })
+        .catch((res) => {
+          let error = Object.assign({}, res);
+
+          console.log(res);
+
+          if (error?.response?.status === 409) {
             resolve(sessionId);
-          } else {
-            console.warn(
-              `No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_SERVER_URL}`
-            );
-            if (
-              window.confirm(
-                `No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_SERVER_URL}\n\nClick OK to navigate and accept it. If no certificate warning is shown, then check that your OpenVidu Server is up and running at "${OPENVIDU_SERVER_URL}"`
-              )
-            ) {
-              location.assign(`${OPENVIDU_SERVER_URL}/accept-certificate`);
-            }
-            reject(error.response);
+          } else if (
+            window.confirm(
+              'No connection to OpenVidu Server. This may be a certificate error at "' +
+                OPENVIDU_SERVER_URL +
+                '"\n\nClick OK to navigate and accept it. If no certifica' +
+                "te warning is shown, then check that your OpenVidu Server is up and running at" +
+                ' "' +
+                OPENVIDU_SERVER_URL +
+                '"'
+            )
+          ) {
+            window.location.assign(OPENVIDU_SERVER_URL + "accept-certificate");
           }
         });
     });
@@ -479,20 +371,25 @@ class OnlineMeeting extends Component {
 
   createToken(sessionId) {
     return new Promise((resolve, reject) => {
+      let data = {};
+
       axios
         .post(
           `${OPENVIDU_SERVER_URL}/openvidu/api/sessions/${sessionId}/connection`,
-          {},
+          data,
           {
-            auth: {
-              username: "OPENVIDUAPP",
-              password: OPENVIDU_SERVER_SECRET,
+            headers: {
+              Authorization: `Basic ${btoa(
+                `OPENVIDUAPP:${OPENVIDU_SERVER_SECRET}`
+              )}`,
+              "Content-Type": "application/json",
             },
           }
         )
-        .then((response) => response.data)
-        .then((data) => resolve(data.token))
-        .catch((error) => reject(error.response));
+        .then((res) => {
+          resolve(res.data.token);
+        })
+        .catch((error) => reject(error));
     });
   }
 }
