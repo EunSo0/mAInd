@@ -121,17 +121,23 @@ function Result() {
   const selectColors = [];
 
   const startHour =
-    result && result.startHour
+    result && result.startHour !== undefined
       ? result.startHour.toString().padStart(2, "0")
-      : "";
+      : "00";
   const startMin =
-    result && result.startMin
+    result && result.startMin !== undefined
       ? result.startMin.toString().padStart(2, "0")
-      : "";
+      : "00";
   const endHour =
-    result && result.endHour ? result.endHour.toString().padStart(2, "0") : "";
+    result && result.endHour !== undefined
+      ? result.endHour.toString().padStart(2, "0")
+      : "00";
   const endMin =
-    result && result.endMin ? result.endMin.toString().padStart(2, "0") : "";
+    result && result.endMin !== undefined
+      ? result.endMin.toString().padStart(2, "0")
+      : "00";
+
+  console.log(startMin);
 
   const onChange = (e) => {
     setCounselorOpinion(e.target.value);
