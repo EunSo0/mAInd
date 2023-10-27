@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/static/css/main.dad87162.css",
+    "main.js": "/static/js/main.e66348ad.js",
+    "static/media/counselImg.png": "/static/media/counselImg.b1e6e93f96640607b5ba.png",
+    "static/media/Ing.png": "/static/media/Ing.d94fa8865730a91b54e2.png",
+    "static/media/HomeMan.png": "/static/media/HomeMan.46cd77d5beedd5d214c4.png",
+    "static/media/goggle.png": "/static/media/goggle.b132e47abe4c1af3e649.png",
+    "index.html": "/index.html",
+    "main.dad87162.css.map": "/static/css/main.dad87162.css.map",
+    "main.e66348ad.js.map": "/static/js/main.e66348ad.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.dad87162.css",
+    "static/js/main.e66348ad.js"
+  ]
+}
