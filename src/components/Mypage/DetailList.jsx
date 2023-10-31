@@ -70,7 +70,9 @@ export default function DetailList({ setIsDetail }) {
             <DL.ContentList>
               <DL.ContentTitle>초기설문지</DL.ContentTitle>
               <DL.ContentTxt>
-                <DL.SurveyBtn>초기설문지</DL.SurveyBtn>
+                <Link to={`/initialSurvey/${detailProfile.survey_id}`}>
+                  <DL.SurveyBtn>초기설문지</DL.SurveyBtn>
+                </Link>
               </DL.ContentTxt>
             </DL.ContentList>
           </DL.ContentWrapper>

@@ -1,22 +1,18 @@
 import React from "react";
 import * as T from "../styles/components/mypage/Table.style";
-
-const ReservationListData = [
-  {
-    date: "현재",
-    step: "상담자 매칭",
-    progress: "진행중",
-    contents: "상담자 매칭이 진행 중입니다",
-  },
-  {
-    date: "23.09.11",
-    step: "설문지 작성",
-    progress: "완료",
-    contents: "초기 설문지 작성을 완료했습니다",
-  },
-];
+import { getUserStatus } from "../api/api";
+import { useQuery } from "react-query";
+import { DateFormat } from "./../utils/DateFormat";
 
 export default function ReservationList() {
+  const { data, isLoading, isError } = useQuery("userInfo", getUserStatus);
+
+  if (isLoading) {
+    return <p>Loading user data...</p>;
+  } else if (isError) {
+    return <p>Error fetching user data</p>;
+  }
+
   return (
     <T.ChartWrapper>
       <T.Chart>
@@ -29,14 +25,22 @@ export default function ReservationList() {
           </T.ChartTr>
         </thead>
         <tbody>
-          {ReservationListData.map((el, index) => (
-            <T.ChartTr key={index}>
-              <T.ChartTd>{el.date}</T.ChartTd>
-              <T.ChartTd>{el.step}</T.ChartTd>
-              <T.ChartTd>{el.progress}</T.ChartTd>
-              <T.ChartTd>{el.contents}</T.ChartTd>
-            </T.ChartTr>
-          ))}
+          <T.ChartTr>
+            <T.ChartTd>{DateFormat(data.statusDate)}</T.ChartTd>
+            {data.userStatus == "ON_MATCHING" ? (
+              <>
+                <T.ChartTd>상담자 매칭</T.ChartTd>
+                <T.ChartTd>진행중</T.ChartTd>
+                <T.ChartTd>상담자 매칭이 진행중입니다.</T.ChartTd>
+              </>
+            ) : (
+              <>
+                <T.ChartTd>매칭 완료</T.ChartTd>
+                <T.ChartTd>완료</T.ChartTd>
+                <T.ChartTd>상담자 매칭이 완료되었습니다.</T.ChartTd>
+              </>
+            )}
+          </T.ChartTr>
         </tbody>
       </T.Chart>
     </T.ChartWrapper>
