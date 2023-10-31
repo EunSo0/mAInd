@@ -28,7 +28,7 @@ export default function Reservation() {
 
   return (
     <R.Wrapper>
-      {data.userStatus !== "BEFORE_SURVEY" ? (
+      {data.userStatus == "BEFORE_SURVEY" ? (
         <>
           <R.Title>
             상담을 예약하고 싶으신가요?
