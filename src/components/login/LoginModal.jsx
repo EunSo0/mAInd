@@ -4,9 +4,6 @@ import React, { useEffect } from "react";
 import * as M from "../../styles/components/LoginModal.style";
 import { AiOutlineClose } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
-// import GoogleLogin from "../components/GoogleLogin";
-//import { useGoogleLogin } from "@react-oauth/google";
-//import jwtDecode from "jwt-decode";
 
 export default function LoginModal({
   isLoginModalOpen,
@@ -54,11 +51,10 @@ export default function LoginModal({
           </M.Close>
           <M.ModalContents>
             <M.Title>시작하기</M.Title>
-            <M.Btn href="https://maind.site/oauth2/authorization/google">
+            <M.Btn href="http://maind.site:8080/oauth2/authorization/google">
               <M.GoogleLogo></M.GoogleLogo>
               <M.SignTxt>Google로 시작하기</M.SignTxt>
             </M.Btn>
-            {/* <GoogleLogin onGoogleSignIn={onGoogleSignIn} text="로그인" /> */}
             <M.TextWrapper>
               <M.Text>mAInd 서비스 필수 동의 항목</M.Text>
               <M.PolicyWrapper>
