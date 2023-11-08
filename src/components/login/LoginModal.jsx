@@ -51,7 +51,7 @@ export default function LoginModal({
           </M.Close>
           <M.ModalContents>
             <M.Title>시작하기</M.Title>
-            <M.Btn href="http://maind.site:8080/oauth2/authorization/google">
+            <M.Btn href="http://maind.shop:8080/oauth2/authorization/google">
               <M.GoogleLogo></M.GoogleLogo>
               <M.SignTxt>Google로 시작하기</M.SignTxt>
             </M.Btn>

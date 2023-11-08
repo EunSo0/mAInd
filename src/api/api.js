@@ -2,7 +2,7 @@ import axios from "axios";
 import { DateFormatTime } from "./../utils/DateFormat";
 
 const token = localStorage.getItem("token");
-const BASE_URL = "https://maind.site";
+const BASE_URL = "https://maind.shop";
 const BASE_URL_VIDEO = "http://maind-meeting.shop:5001";
 
 //초기 설문지

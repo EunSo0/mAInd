@@ -85,19 +85,19 @@ export default function List({ setIsDetail }) {
         </T.ChartWrapper>
       ) : (
         <T.ChartWrapper>
-          <T.Chart>
-            <thead>
-              <T.ChartTr>
-                <T.ChartTh>번호</T.ChartTh>
-                <T.ChartTh>내담자명</T.ChartTh>
-                <T.ChartTh>상담일자</T.ChartTh>
-                <T.ChartTh>증상</T.ChartTh>
-                <T.ChartTh>상담결과</T.ChartTh>
-              </T.ChartTr>
-            </thead>
-            <tbody>
-              {Array.isArray(clientList) && clientList.length > 0 ? (
-                clientList.map((el, index) => (
+          {Array.isArray(clientList) && clientList.length > 0 ? (
+            <T.Chart>
+              <thead>
+                <T.ChartTr>
+                  <T.ChartTh>번호</T.ChartTh>
+                  <T.ChartTh>내담자명</T.ChartTh>
+                  <T.ChartTh>상담일자</T.ChartTh>
+                  <T.ChartTh>증상</T.ChartTh>
+                  <T.ChartTh>상담결과</T.ChartTh>
+                </T.ChartTr>
+              </thead>
+              <tbody>
+                {clientList.map((el, index) => (
                   <T.ChartTr key={index}>
                     <T.ChartTd>{index + 1}</T.ChartTd>
                     <T.ChartTd>{el.name}</T.ChartTd>
@@ -109,12 +109,12 @@ export default function List({ setIsDetail }) {
                       </Link>
                     </T.ChartTd>
                   </T.ChartTr>
-                ))
-              ) : (
-                <L.Undefined>상담 목록이 없습니다.</L.Undefined>
-              )}
-            </tbody>
-          </T.Chart>
+                ))}
+              </tbody>
+            </T.Chart>
+          ) : (
+            <L.Undefined>상담 목록이 없습니다.</L.Undefined>
+          )}
         </T.ChartWrapper>
       )}
     </L.Wrapper>

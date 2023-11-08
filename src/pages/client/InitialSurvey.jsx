@@ -149,8 +149,8 @@ export default function InitialSurvey() {
                       id={`symptom-${symptom.id}`}
                       value={symptom.name}
                       checked={
-                        getValues().symptoms &&
-                        getValues().symptoms.includes(symptom.id)
+                        getValues().symptom &&
+                        getValues().symptom.includes(symptom.id)
                       }
                       onChange={() => handleCheckboxChange(symptom.id)}
                       {...register("symptoms")}
