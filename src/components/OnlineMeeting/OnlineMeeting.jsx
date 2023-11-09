@@ -14,7 +14,7 @@ import HeadsetOffIcon from "@mui/icons-material/HeadsetOff";
 import CallEndIcon from "@mui/icons-material/CallEnd";
 import ChatIcon from "@mui/icons-material/Chat";
 
-const OPENVIDU_SERVER_URL = "https://maind.site:4443";
+const OPENVIDU_SERVER_URL = "https://maind.shop:4443";
 const OPENVIDU_SERVER_SECRET = "maind0000";
 
 class OnlineMeeting extends Component {

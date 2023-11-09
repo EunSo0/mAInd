@@ -53,18 +53,18 @@ export default function List({ setIsDetail }) {
       </L.ListWrapper>
       {role === "COUNSELOR" ? (
         <T.ChartWrapper>
-          <T.Chart>
-            <thead>
-              <T.ChartTr>
-                <T.ChartTh>번호</T.ChartTh>
-                <T.ChartTh>내담자명</T.ChartTh>
-                <T.ChartTh>생년월일</T.ChartTh>
-                <T.ChartTh>증상</T.ChartTh>
-              </T.ChartTr>
-            </thead>
-            <tbody>
-              {Array.isArray(counselList) && counselList.length > 0 ? (
-                counselList.map((el, index) => (
+          {Array.isArray(counselList) && counselList.length > 0 ? (
+            <T.Chart>
+              <thead>
+                <T.ChartTr>
+                  <T.ChartTh>번호</T.ChartTh>
+                  <T.ChartTh>내담자명</T.ChartTh>
+                  <T.ChartTh>생년월일</T.ChartTh>
+                  <T.ChartTh>증상</T.ChartTh>
+                </T.ChartTr>
+              </thead>
+              <tbody>
+                {counselList.map((el, index) => (
                   <T.ChartTr key={index}>
                     <T.ChartTd>{index + 1}</T.ChartTd>
                     <T.ChartTd
@@ -76,12 +76,12 @@ export default function List({ setIsDetail }) {
                     <T.ChartTd>{DateFormat(el.birth)}</T.ChartTd>
                     <T.ChartTd key={index}>{el.symptoms.join(", ")}</T.ChartTd>
                   </T.ChartTr>
-                ))
-              ) : (
-                <L.Undefined>상담 목록이 없습니다.</L.Undefined>
-              )}
-            </tbody>
-          </T.Chart>
+                ))}
+              </tbody>
+            </T.Chart>
+          ) : (
+            <L.Undefined>상담 목록이 없습니다.</L.Undefined>
+          )}
         </T.ChartWrapper>
       ) : (
         <T.ChartWrapper>
