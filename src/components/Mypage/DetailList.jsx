@@ -81,7 +81,7 @@ export default function DetailList({ setIsDetail }) {
         <p>Loading...</p>
       )}
 
-      {detailList !== null && (
+      {detailList && (
         <T.ChartWrapper>
           <T.Chart>
             <thead>

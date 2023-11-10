@@ -16,6 +16,7 @@ import ChatIcon from "@mui/icons-material/Chat";
 
 const OPENVIDU_SERVER_URL = "https://maind.shop:4443";
 const OPENVIDU_SERVER_SECRET = "maind0000";
+const token = localStorage.getItem("token");
 
 class OnlineMeeting extends Component {
   render() {
@@ -128,7 +129,7 @@ class OnlineMeeting extends Component {
     this.userRef = React.createRef();
 
     this.state = {
-      mySessionId: "SessionABC",
+      mySessionId: token,
       myUserName: "Participant" + Math.floor(Math.random() * 100),
       session: undefined,
       mainStreamManager: undefined,
@@ -176,7 +177,7 @@ class OnlineMeeting extends Component {
     this.setState({
       session: undefined,
       subscribers: [],
-      mySessionId: "SessionA",
+      mySessionId: undefined,
       myUserName: "Participant" + Math.floor(Math.random() * 100),
       mainStreamManager: undefined,
       publisher: undefined,

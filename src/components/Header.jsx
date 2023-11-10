@@ -61,19 +61,34 @@ export default function Header() {
           {isLogin ? (
             <H.LinkWrapper>
               <H.NavLinks>
-                <H.NavLink>
-                  <Link to="/OnlineMeeting">상담하기</Link>
-                </H.NavLink>
-                <H.NavLink>
-                  {role == "CLIENT" ? (
-                    <Link to="/reservation/client">상담예약</Link>
-                  ) : (
-                    <Link to="/reservation/counselor">상담예약</Link>
-                  )}
-                </H.NavLink>
-                <H.NavLink>
-                  <Link to="/mypage">마이페이지</Link>
-                </H.NavLink>
+                {role == "CLIENT" ? (
+                  <>
+                    <H.NavLink>
+                      <Link to="/reservation/client">상담예약</Link>
+                    </H.NavLink>
+                    <H.NavLink>
+                      <Link to="/OnlineMeeting">화상상담</Link>
+                    </H.NavLink>
+                    <H.NavLink>
+                      <Link to="/mypage">마이페이지</Link>
+                    </H.NavLink>
+                  </>
+                ) : (
+                  <>
+                    <H.NavLink>
+                      <Link to="/reservation/counselor">예약내역</Link>
+                    </H.NavLink>
+                    <H.NavLink>
+                      <Link to="/counsel">상담분석</Link>
+                    </H.NavLink>
+                    <H.NavLink>
+                      <Link to="/OnlineMeeting">화상상담</Link>
+                    </H.NavLink>
+                    <H.NavLink>
+                      <Link to="/mypage">마이페이지</Link>
+                    </H.NavLink>
+                  </>
+                )}
               </H.NavLinks>
               <H.Name>{name}님</H.Name>
               {role == "CLIENT" ? (

@@ -19,6 +19,8 @@ export default function Counsel() {
     return <p>Error fetching user data</p>;
   }
 
+  console.log(data.upload);
+
   return (
     <C.Wrapper>
       {role !== "CLIENT" ? (
@@ -54,7 +56,7 @@ export default function Counsel() {
                               {el.symptoms ? el.symptoms.join(", ") : ""}
                             </T.ChartTd>
                             <T.ChartTd>
-                              {el.upload === false ? (
+                              {!el.upload ? (
                                 <Link to={`/counsel/upload/${el.survey_id}`}>
                                   <T.ResultBtn className="upload">
                                     영상업로드하기
