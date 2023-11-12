@@ -158,9 +158,15 @@ class OnlineMeeting extends Component {
     // --- 7) Leave the session by calling 'disconnect' method over the Session object ---
 
     const mySession = this.state.session;
+    const myPublisher = this.state.publisher;
 
     if (mySession) {
       mySession.disconnect();
+    }
+
+    if (myPublisher) {
+      myPublisher.publishVideo(false); // 비디오 중지
+      mySession.unpublish(myPublisher);
     }
 
     // Empty all properties...
