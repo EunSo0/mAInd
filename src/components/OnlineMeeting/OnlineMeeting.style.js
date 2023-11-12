@@ -1,13 +1,11 @@
 import styled from "@emotion/styled";
 
 export const Container = styled.div`
-  height: 100vh;
   width: 100%;
-  background-color: #202124;
+  background-color: #eff1ff;
 `;
 
 export const Header = styled.div`
-  height: 8vh;
   display: flex;
   align-items: center;
   padding: 0 50px;
@@ -15,15 +13,56 @@ export const Header = styled.div`
 `;
 
 export const StudyTitle = styled.p`
-  color: white;
-  font-size: 20px;
+  color: #000;
+  font-size: 32px;
   font-weight: 600;
+  font-family: "Poppins", sans-serif;
+  margin: 24px 0;
 `;
 
 export const Middle = styled.div`
   width: 100%;
   display: flex;
   overflow: hidden;
+`;
+
+export const JoinWrapper = styled.div`
+  position: absolute;
+  right: 0;
+  left: 0;
+  margin: 0 auto;
+`;
+export const TxtWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+export const TxtList = styled.div`
+  font-size: 24px;
+  margin: 4px;
+`;
+export const Txt = styled.div`
+  color: #36f;
+  margin-top: 24px;
+  margin-bottom: 50px;
+`;
+export const ButtonForm = styled.form`
+  display: flex;
+  justify-content: center;
+`;
+export const Button = styled.input`
+  width: 350px;
+  height: 80px;
+  border-radius: 32px;
+  border: none;
+  background: #36f;
+  color: #fff;
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 24px;
+  cursor: pointer;
+  text-align: center;
 `;
 
 export const Left = styled.div`

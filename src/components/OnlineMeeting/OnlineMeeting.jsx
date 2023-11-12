@@ -27,35 +27,24 @@ class OnlineMeeting extends Component {
         </O.Header>
         <O.Middle>
           {this.state.session === undefined ? (
-            <div
-              style={{
-                position: "absolute",
-                right: "0",
-                left: "0",
-                width: "300px",
-                margin: "auto",
-                height: "300px",
-              }}
-              id="join"
-            >
-              <div>
-                <h1 style={{ color: "white" }}> Join a video session </h1>
-                <form
-                  style={{ display: "flex", justifyContent: "center" }}
-                  className="form-group"
-                  onSubmit={this.joinSession}
-                >
-                  <p className="text-center">
-                    <input
-                      className="btn btn-lg btn-success"
-                      name="commit"
-                      type="submit"
-                      value="JOIN"
-                    />
-                  </p>
-                </form>
-              </div>
-            </div>
+            <O.JoinWrapper>
+              <O.TxtWrapper>
+                <O.TxtList>
+                  - 상담에 집중할 수 있는 장소에서 상담을 진행해주세요.
+                </O.TxtList>
+                <O.TxtList>
+                  - 상담 결과는 상담분석 후 상담자의 의견을 추가해
+                  전달해드립니다.
+                </O.TxtList>
+                <O.Txt>
+                  본 상담은 녹화되어 결과분석에 이용됩니다. 녹화 영상은 분석에만
+                  이용되며 30일간 보관 후 폐기됩니다.
+                </O.Txt>
+              </O.TxtWrapper>
+              <O.ButtonForm onSubmit={this.joinSession}>
+                <O.Button name="commit" type="submit" value="상담 시작하기" />
+              </O.ButtonForm>
+            </O.JoinWrapper>
           ) : null}
           <O.Left>
             <O.VideoContainer>
@@ -83,43 +72,45 @@ class OnlineMeeting extends Component {
             </O.VideoContainer>
           </O.Left>
         </O.Middle>
-        <O.Bottom>
-          <O.BottomBox>
-            <O.Icon
-              primary={!this.state.isCamera}
-              onClick={() => this.handleToggle("camera")}
-            >
-              {this.state.isCamera ? (
-                <VideocamOutlinedIcon />
-              ) : (
-                <VideocamOffOutlinedIcon />
-              )}
-            </O.Icon>
+        {this.state.session !== undefined ? (
+          <O.Bottom>
+            <O.BottomBox>
+              <O.Icon
+                primary={!this.state.isCamera}
+                onClick={() => this.handleToggle("camera")}
+              >
+                {this.state.isCamera ? (
+                  <VideocamOutlinedIcon />
+                ) : (
+                  <VideocamOffOutlinedIcon />
+                )}
+              </O.Icon>
 
-            <O.Icon
-              primary={!this.state.isMike}
-              onClick={() => this.handleToggle("mike")}
-            >
-              {this.state.isMike ? <MicOutlinedIcon /> : <MicOffIcon />}
-            </O.Icon>
+              <O.Icon
+                primary={!this.state.isMike}
+                onClick={() => this.handleToggle("mike")}
+              >
+                {this.state.isMike ? <MicOutlinedIcon /> : <MicOffIcon />}
+              </O.Icon>
 
-            <O.Icon
-              primary={!this.state.isSpeaker}
-              onClick={() => this.handleToggle("speaker")}
-            >
-              {this.state.isSpeaker ? <HeadsetIcon /> : <HeadsetOffIcon />}
-            </O.Icon>
+              <O.Icon
+                primary={!this.state.isSpeaker}
+                onClick={() => this.handleToggle("speaker")}
+              >
+                {this.state.isSpeaker ? <HeadsetIcon /> : <HeadsetOffIcon />}
+              </O.Icon>
 
-            <O.Icon primary onClick={this.leaveSession}>
-              <CallEndIcon />
-            </O.Icon>
-          </O.BottomBox>
-          <O.ChatIconBox
-            onClick={() => this.setState({ isChat: !this.state.isChat })}
-          >
-            <ChatIcon />
-          </O.ChatIconBox>
-        </O.Bottom>
+              <O.Icon primary onClick={this.leaveSession}>
+                <CallEndIcon />
+              </O.Icon>
+            </O.BottomBox>
+            <O.ChatIconBox
+              onClick={() => this.setState({ isChat: !this.state.isChat })}
+            >
+              <ChatIcon />
+            </O.ChatIconBox>
+          </O.Bottom>
+        ) : null}
       </O.Container>
     );
   }
@@ -129,7 +120,7 @@ class OnlineMeeting extends Component {
     this.userRef = React.createRef();
 
     this.state = {
-      mySessionId: token,
+      sessionName: "SessionA",
       myUserName: "Participant" + Math.floor(Math.random() * 100),
       session: undefined,
       mainStreamManager: undefined,
