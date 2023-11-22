@@ -83,12 +83,14 @@ export const VideoContainer = styled.div`
 export const StreamContainerWrapper = styled.div`
   display: grid;
   place-items: center;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: ${({ singleParticipant }) =>
+    singleParticipant ? "1fr" : "repeat(2, 1fr)"};
   grid-gap: 20px;
   height: 100%;
   padding: 10px;
   @media screen and (max-width: 800px) {
-    background-color: red;
+    background-color: ${({ singleParticipant }) =>
+      singleParticipant ? "blue" : "red"};
   }
 `;
 

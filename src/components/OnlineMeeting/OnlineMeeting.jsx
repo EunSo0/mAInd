@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-undef */
 import React, { Component } from "react";
 import { OpenVidu } from "openvidu-browser";
 import axios from "axios";
@@ -16,10 +14,10 @@ import ChatIcon from "@mui/icons-material/Chat";
 
 const OPENVIDU_SERVER_URL = "https://maind.shop:4443";
 const OPENVIDU_SERVER_SECRET = "maind0000";
-const token = localStorage.getItem("token");
 
 class OnlineMeeting extends Component {
   render() {
+    const isSingleParticipant = this.state.participantCount === 1;
     return (
       <O.Container>
         <O.Header>
@@ -52,6 +50,7 @@ class OnlineMeeting extends Component {
                 <O.StreamContainerWrapper
                   primary={this.state.isChat}
                   ref={this.userRef}
+                  singleParticipant={isSingleParticipant}
                 >
                   {this.state.publisher !== undefined ? (
                     <O.StreamContainer
@@ -126,10 +125,10 @@ class OnlineMeeting extends Component {
       mainStreamManager: undefined,
       publisher: undefined, // 로컬 웹캠 스트림
       subscribers: [], // 다른 사용자의 활성 스트림
+      participantCount: 1,
       isMike: true,
       isCamera: true,
       isSpeaker: true,
-      isChat: false,
     };
 
     this.joinSession = this.joinSession.bind(this);
@@ -248,7 +247,10 @@ class OnlineMeeting extends Component {
           var subscribers = this.state.subscribers;
           subscribers.push(subscriber);
 
-          this.setState({ subscribers });
+          this.setState({
+            subscribers,
+            participantCount: subscribers.length + 1,
+          });
 
           console.log(subscribers);
         });
@@ -256,6 +258,10 @@ class OnlineMeeting extends Component {
         // 사용자가 화상회의를 떠나면 Session 객체에서 소멸된 stream을 받아와 subscribers 상태값 업뎃
         mySession.on("streamDestroyed", (e) => {
           this.deleteSubscriber(e.stream.streamManager);
+
+          this.setState((prevState) => ({
+            participantCount: prevState.participantCount - 1,
+          }));
         });
 
         // 서버 측에서 비동기식 오류 발생 시 Session 객체에 의해 트리거되는 이벤트
@@ -322,7 +328,7 @@ class OnlineMeeting extends Component {
   }
 
   createSession(sessionId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let data = JSON.stringify({ customSessionId: sessionId });
 
       axios
